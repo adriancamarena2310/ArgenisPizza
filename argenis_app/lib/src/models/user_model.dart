@@ -52,7 +52,7 @@ Usuario? obtenerUsuarioPorUserName(List<Usuario> usuarios, String userName){
       password: 'password',
       email: 'adrian.camarena@example.com',
       number: '0987654321',
-      image: 'images/user/camarena.jpg',
+      image: 'images/users/camarena.jpg',
     ),
     Usuario(
       id: 3,
@@ -60,7 +60,7 @@ Usuario? obtenerUsuarioPorUserName(List<Usuario> usuarios, String userName){
       password: 'password',
       email: 'kevin.chikil@example.com',
       number: '598343432',
-      image: 'images/user/chikil.jpg',
+      image: 'images/users/chikil.jpg',
     ),
   ];
 

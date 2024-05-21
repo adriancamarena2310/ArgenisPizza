@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeDomicilioScreen> {
           );
         },
       ),
-      drawer: GetDrawer.getDrawer(context), // Añadiendo el drawer
+      drawer: GetDrawer.getDrawer(context, widget.user ), // Añadiendo el drawer
     );
   }
 
