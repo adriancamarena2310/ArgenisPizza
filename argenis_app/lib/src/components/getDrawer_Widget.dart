@@ -12,7 +12,7 @@ class GetDrawer extends StatelessWidget {
             accountEmail: const Text("ayalacamarena@gmail.com"),
             currentAccountPicture: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset("images/assets/argenis.jpg")),
+              child: Image.asset("images/users/chikil.jpg")),
             otherAccountsPictures: const <Widget>[
             ],
             onDetailsPressed: () {},

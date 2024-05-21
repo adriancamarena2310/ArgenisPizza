@@ -2,17 +2,17 @@ import 'package:argenis_app/src/models/pizzas_model.dart';
 import 'package:flutter/material.dart';
 
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeTiendaScreen extends StatefulWidget {
+  const HomeTiendaScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _HomeScreenState createState() => _HomeScreenState();
+  _HomeTiendaScreenState createState() => _HomeTiendaScreenState();
 
   
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeTiendaScreenState extends State<HomeTiendaScreen> {
   final _scaffkey = GlobalKey<ScaffoldState>();
   
   double total = 0.0;

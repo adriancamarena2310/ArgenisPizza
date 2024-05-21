@@ -1,4 +1,4 @@
-import 'package:argenis_app/src/screens/Home_Domicilio_Screen.dart';
+import 'package:argenis_app/src/screens/Home_Tienda_Screen.dart';
 import 'package:argenis_app/src/screens/Login_Screen.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +12,7 @@ class PreviewScreen extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset("images/assets/fondoLogin.jpg",
+          Image.asset("images/assets/fondoPreview.gif",
             fit: BoxFit.cover,
           ),
           Column(
@@ -22,7 +22,7 @@ class PreviewScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const HomeDomicilioScreen()),
+                    MaterialPageRoute(builder: (context) => const HomeTiendaScreen()),
                   );
                 },
                 child: const Text('Buscar en tienda'),

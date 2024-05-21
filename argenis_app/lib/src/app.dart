@@ -1,4 +1,5 @@
-import 'package:argenis_app/src/screens/Home_Screen.dart';
+import 'package:argenis_app/src/screens/Home_Domicilio_Screen.dart';
+import 'package:argenis_app/src/screens/Home_Tienda_Screen.dart';
 import 'package:argenis_app/src/screens/Login_Screen.dart';
 import 'package:argenis_app/src/screens/Preview_Screen.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,8 @@ class MyApp extends StatelessWidget {
       routes: {
         "/": (BuildContext context ) => const PreviewScreen(),//prelogin
         "/login": (BuildContext context ) => const LoginScreen(),
-        "/home": (BuildContext context ) => const HomeScreen()
+        "/homeTienda": (BuildContext context ) => const HomeTiendaScreen(),
+        "/homeDomicilio": (BuildContext context ) => const HomeDomicilioScreen(),
       },
     );
   }

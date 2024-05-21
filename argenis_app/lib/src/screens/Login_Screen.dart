@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset("images/assets/argenis.jpg",
+          Image.asset("images/assets/fondo.jpg",
             fit: BoxFit.cover,
           ),
           Padding(
@@ -145,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _showHomeScreen(BuildContext context) {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-      Navigator.of(context).pushNamed("/home", arguments: {
+      Navigator.of(context).pushNamed("/homeDomicilio", arguments: {
         'name': nameValue,
         'lastName': lastNameValue,
         'phone': phoneValue,
