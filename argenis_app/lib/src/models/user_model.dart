@@ -28,6 +28,15 @@ bool verificarUsuario(List<Usuario> usuarios, String userName, String password){
     return false;
   }
 
+Usuario? obtenerUsuarioPorUserName(List<Usuario> usuarios, String userName){
+  for(var usuario in usuarios){
+      if(usuario.userName == userName){
+        return usuario;
+      }
+    }
+    return null;
+}
+
   List<Usuario> usuarios = [
     Usuario(
       id: 1,

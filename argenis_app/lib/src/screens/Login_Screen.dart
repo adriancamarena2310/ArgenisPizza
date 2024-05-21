@@ -84,11 +84,12 @@ class _LoginScreenState extends State<LoginScreen> {
       String userNameValue = userNameController.text;
       String passwordValue = passwordController.text;
 
-      bool existe = verificarUsuario(usuarios, userNameValue, passwordValue);
+      var existe = verificarUsuario(usuarios, userNameValue, passwordValue);
+      var user = obtenerUsuarioPorUserName(usuarios, userNameValue);
       if (existe) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const HomeDomicilioScreen()),
+          MaterialPageRoute(builder: (context) => HomeDomicilioScreen(user: user)),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

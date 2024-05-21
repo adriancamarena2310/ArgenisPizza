@@ -1,9 +1,11 @@
 import 'package:argenis_app/src/models/pizzas_model.dart';
+import 'package:argenis_app/src/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:argenis_app/src/components/getDrawer_Widget.dart';
 
 class HomeDomicilioScreen extends StatefulWidget {
-  const HomeDomicilioScreen({super.key});
+  final Usuario? user;
+  const HomeDomicilioScreen({super.key, required this.user});
 
   @override
   // ignore: library_private_types_in_public_api
