@@ -1,12 +1,12 @@
 import 'package:argenis_app/src/models/calcular_model.dart';
 import 'package:argenis_app/src/models/pizzas_model.dart';
 import 'package:flutter/material.dart';
-import 'package:argenis_app/src/components/getDrawer_Widget.dart'; 
 
 class HomeTiendaScreen extends StatefulWidget {
   const HomeTiendaScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomeTiendaScreenState createState() => _HomeTiendaScreenState();
 }
 
@@ -25,7 +25,6 @@ class _HomeTiendaScreenState extends State<HomeTiendaScreen> {
         title: const Text("Argenis"),
         backgroundColor: Colors.deepOrange,
       ),
-      drawer: GetDrawer.getDrawer(context), 
       body: Column(
         children: [
           Expanded(

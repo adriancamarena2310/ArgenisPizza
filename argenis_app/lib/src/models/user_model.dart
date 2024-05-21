@@ -1,7 +1,6 @@
 class Usuario {
   int id;
-  String name;
-  String lastName;
+  String userName;
   String password;
   String email;
   String number;
@@ -9,21 +8,30 @@ class Usuario {
 
   Usuario({
     required this.id,
-    required this.name,
-    required this.lastName,
+    required this.userName,
     required this.password,
     required this.email,
     required this.number,
     required this.image,
   });
 
+  
+  
 }
+
+bool verificarUsuario(List<Usuario> usuarios, String userName, String password){
+    for(var usuario in usuarios){
+      if(usuario.userName == userName && usuario.password == password){
+        return true;
+      }
+    }
+    return false;
+  }
 
   List<Usuario> usuarios = [
     Usuario(
       id: 1,
-      name: 'Manuel',
-      lastName: 'Alaya',
+      userName: 'Manuel',
       password: 'password',
       email: 'manuel.alayax@example.com',
       number: '1234567890',
@@ -31,8 +39,7 @@ class Usuario {
     ),
     Usuario(
       id: 2,
-      name: 'Adrian',
-      lastName: 'Camarena',
+      userName: 'Adrian',
       password: 'password',
       email: 'adrian.camarena@example.com',
       number: '0987654321',
@@ -40,12 +47,12 @@ class Usuario {
     ),
     Usuario(
       id: 3,
-      name: 'Kevin',
-      lastName: 'Chiquil',
+      userName: 'Kevin',
       password: 'password',
       email: 'kevin.chikil@example.com',
       number: '598343432',
       image: 'images/user/chikil.jpg',
     ),
   ];
+
 
