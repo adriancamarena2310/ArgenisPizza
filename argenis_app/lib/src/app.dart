@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       title: "ArgenisPizza",
       initialRoute: "/",
       routes: {
-        "/": (BuildContext context ) => const PreviewScreen(),//prelogin
+        "/": (BuildContext context ) => const HomeDomicilioScreen(),//prelogin
         "/login": (BuildContext context ) => const LoginScreen(),
         "/homeTienda": (BuildContext context ) => const HomeTiendaScreen(),
         "/homeDomicilio": (BuildContext context ) => const HomeDomicilioScreen(),

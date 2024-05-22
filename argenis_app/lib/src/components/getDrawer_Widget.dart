@@ -10,11 +10,15 @@ class GetDrawer extends StatelessWidget {
           UserAccountsDrawerHeader(
             accountName: const Text("Ayala Camarena"),
             accountEmail: const Text("ayalacamarena@gmail.com"),
-            currentAccountPicture: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.asset("images/users/ayalax.jpg")),
-            otherAccountsPictures: const <Widget>[
-            ],
+            currentAccountPicture: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset("images/users/ayalax.jpg"),
+                ),
+              ],
+            ),
+            otherAccountsPictures: const <Widget>[],
             onDetailsPressed: () {},
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -28,6 +32,13 @@ class GetDrawer extends StatelessWidget {
             leading: const Icon(Icons.home),
             onTap: () => showHome(context),
           ),
+          ListTile(
+            title: const Text("Perfil"),
+            leading: const Icon(Icons.person),
+            onTap: () {
+              Navigator.of(context).pushNamed('/profile');
+            },
+          ),
         ],
       ),
     );
@@ -39,7 +50,6 @@ class GetDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Return an empty container or some default widget if needed
     return Container();
   }
 }
