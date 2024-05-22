@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "ArgenisPizza",
       initialRoute: "/",
+      debugShowCheckedModeBanner: false,
       routes: {
         "/": (BuildContext context ) => const PreviewScreen(),//prelogin
         "/login": (BuildContext context ) => const LoginScreen(),

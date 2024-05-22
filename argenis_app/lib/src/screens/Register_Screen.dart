@@ -1,3 +1,5 @@
+import 'package:argenis_app/src/models/user_model.dart';
+import 'package:argenis_app/src/screens/Login_Screen.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -8,19 +10,15 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  late String nameValue;
-  late String phoneValue;
-  late String emailValue;
+  late TextEditingController userNameController;
+  late TextEditingController passwordController;
+  late TextEditingController emailController;
+  late TextEditingController numberController;
 
-  final nameController = TextEditingController();
-  final lastNameController = TextEditingController();
-  final phoneController = TextEditingController();
-  final emailController = TextEditingController();
-
-  late FocusNode nameFocus;
-  late FocusNode lastNameFocus;
-  late FocusNode phoneFocus;
+  late FocusNode userNameFocus;
+  late FocusNode passwordFocus;
   late FocusNode emailFocus;
+  late FocusNode numberFocus;
 
   final formKey = GlobalKey<FormState>();
 
@@ -29,11 +27,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pizzeria Argenis - Registro'),
+        backgroundColor: Colors.deepOrange,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/assets/fondo.jpg"),
+            image: AssetImage("images/assets/Font.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -42,73 +41,101 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Form(
             key: formKey,
             child: Column(
-              children: <Widget>[
-                TextFormField(
-                  controller: nameController,
-                  decoration: const InputDecoration(
-                    labelText: "Nombre:",
-                    fillColor: Colors.white,
-                    filled: true,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  color: const Color.fromARGB(255, 248, 249, 248),
+                  child: TextFormField(
+                    controller: userNameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Nombre de usuario',
+                      border: OutlineInputBorder(),
+                    ),
+                    focusNode: userNameFocus,
+                    onEditingComplete: () =>
+                        requestFocus(context, passwordFocus),
+                    textInputAction: TextInputAction.next,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Llene este campo";
+                      }
+                      return null;
+                    },
                   ),
-                  onSaved: (value) {
-                    nameValue = value!;
-                  },
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Llene este campo";
-                    }
-                    return null;
-                  },
-                  focusNode: nameFocus,
-                  onEditingComplete: () => requestFocus(context, lastNameFocus),
-                  textInputAction: TextInputAction.next,
                 ),
-                TextFormField(
-                  controller: phoneController,
-                  decoration: const InputDecoration(
-                    labelText: "Número de teléfono:",
-                    fillColor: Colors.white,
-                    filled: true,
+                const SizedBox(height: 16),
+                Container(
+                  color: const Color.fromARGB(255, 248, 249, 248),
+                  child: TextFormField(
+                    controller: passwordController,
+                    decoration: const InputDecoration(
+                      labelText: 'Contraseña',
+                      border: OutlineInputBorder(),
+                    ),
+                    focusNode: passwordFocus,
+                    onEditingComplete: () => requestFocus(context, emailFocus),
+                    textInputAction: TextInputAction.next,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Llene este campo";
+                      }
+                      return null;
+                    },
                   ),
-                  keyboardType: TextInputType.phone,
-                  onSaved: (value) {
-                    phoneValue = value!;
-                  },
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Llene este campo";
-                    }
-                    return null;
-                  },
-                  focusNode: phoneFocus,
-                  onEditingComplete: () => requestFocus(context, emailFocus),
-                  textInputAction: TextInputAction.next,
                 ),
-                TextFormField(
-                  controller: emailController,
-                  decoration: const InputDecoration(
-                    labelText: "Correo electrónico:",
-                    fillColor: Colors.white,
-                    filled: true,
+                const SizedBox(height: 16),
+                Container(
+                  color: const Color.fromARGB(255, 248, 249, 248),
+                  child: TextFormField(
+                    controller: emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Correo Electronico',
+                      border: OutlineInputBorder(),
+                    ),
+                    focusNode: emailFocus,
+                    keyboardType: TextInputType.emailAddress,
+                    onEditingComplete: () => requestFocus(context, numberFocus),
+                    textInputAction: TextInputAction.next,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Llene este campo";
+                      }
+                      return null;
+                    },
                   ),
-                  keyboardType: TextInputType.emailAddress,
-                  onSaved: (value) {
-                    emailValue = value!;
-                  },
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Llene este campo";
-                    }
-                    return null;
-                  },
-                  focusNode: emailFocus,
-                  textInputAction: TextInputAction.done,
                 ),
+                const SizedBox(height: 16),
+                Container(
+                  color: const Color.fromARGB(255, 248, 249, 248),
+                  child: TextFormField(
+                    controller: numberController,
+                    decoration: const InputDecoration(
+                      labelText: 'Número de telefono',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                    focusNode: numberFocus,
+                    textInputAction: TextInputAction.next,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Llene este campo";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                const SizedBox(height: 32),
                 ElevatedButton(
-                  child: const Text('Registrar'),
                   onPressed: () {
-                    _showHomeScreen(context);
+                    _newUser();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                    );
                   },
+                  child: const Text('Registrarse'),
                 ),
               ],
             ),
@@ -118,41 +145,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void requestFocus(BuildContext context, FocusNode focusNode) {
-    FocusScope.of(context).requestFocus(focusNode);
-  }
-
-  void _showHomeScreen(BuildContext context) {
-    if (formKey.currentState!.validate()) {
-      formKey.currentState!.save();
-      Navigator.of(context).pushNamed("/homeDomicilio", arguments: {
-        'name': nameValue,
-        'phone': phoneValue,
-        'email': emailValue,
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    nameController.dispose();
-    lastNameController.dispose();
-    phoneController.dispose();
-    emailController.dispose();
-
-    nameFocus.dispose();
-    lastNameFocus.dispose();
-    phoneFocus.dispose();
-    emailFocus.dispose();
+  void _newUser() {
+    Usuario? newUser = Usuario(
+      id: ultimoUsuario()!.id + 1,
+      userName: userNameController.text,
+      password: passwordController.text,
+      email: emailController.text,
+      number: numberController.text,
+      image: "images/assets/argenis.jpg",
+    );
+    
+    usuarios.add(newUser);
   }
 
   @override
   void initState() {
     super.initState();
-    nameFocus = FocusNode();
-    lastNameFocus = FocusNode();
-    phoneFocus = FocusNode();
+
+    userNameController = TextEditingController();
+    passwordController = TextEditingController();
+    emailController = TextEditingController();
+    numberController = TextEditingController();
+
+    userNameFocus = FocusNode();
+    passwordFocus = FocusNode();
     emailFocus = FocusNode();
+    numberFocus = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    userNameController.dispose();
+    passwordController.dispose();
+    emailController.dispose();
+    numberController.dispose();
+
+    userNameFocus.dispose();
+    passwordFocus.dispose();
+    emailFocus.dispose();
+    numberFocus.dispose();
+
+    super.dispose();
+  }
+
+  void requestFocus(BuildContext context, FocusNode focusNode) {
+    FocusScope.of(context).requestFocus(focusNode);
   }
 }

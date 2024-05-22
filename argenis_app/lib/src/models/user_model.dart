@@ -14,8 +14,6 @@ class Usuario {
     required this.number,
     required this.image,
   });
-
-  
   
 }
 
@@ -35,6 +33,14 @@ Usuario? obtenerUsuarioPorUserName(List<Usuario> usuarios, String userName){
       }
     }
     return null;
+}
+
+Usuario? ultimoUsuario(){
+  if(usuarios.isNotEmpty){
+    return usuarios.last;
+  }else{
+    return null;
+  }
 }
 
   List<Usuario> usuarios = [

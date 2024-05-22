@@ -39,10 +39,13 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
                       children: [
                         Row(
                           children: [
-                            Image.asset(
-                              pizzas[index].image,
-                              height: 150,
-                              fit: BoxFit.cover,
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.asset(
+                                pizzas[index].image,
+                                height: 150,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                             const SizedBox(width: 40),
                             Column(

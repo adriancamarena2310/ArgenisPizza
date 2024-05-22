@@ -34,7 +34,6 @@ class GetDrawer extends StatelessWidget {
                 },
               ),
             ],
-            onDetailsPressed: () {},
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [Colors.deepOrange, Colors.black],
