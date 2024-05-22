@@ -101,7 +101,7 @@ class _HomeTiendaScreenState extends State<HomeTiendaScreen> {
             ),
           ),
           Container(
-            color: Colors.grey[200],
+            color: Colors.deepOrange[500],
             padding: const EdgeInsets.all(16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
