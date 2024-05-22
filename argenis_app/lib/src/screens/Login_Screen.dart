@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:argenis_app/src/models/user_model.dart';
 import 'package:argenis_app/src/screens/Home_Domicilio_Screen.dart';
-import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -24,52 +24,66 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         title: const Text('Inicio de Sesión'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: userNameController,
-                decoration: const InputDecoration(
-                  labelText: 'Usuario',
-                  border: OutlineInputBorder(),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/assets/Font.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  color: const Color.fromARGB(255, 248, 249, 248), 
+                  child: TextFormField(
+                    controller: userNameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Usuario',
+                      border: OutlineInputBorder(),
+                    ),
+                    focusNode: userNameFocus,
+                    onEditingComplete: () => requestFocus(context, passwordFocus),
+                    textInputAction: TextInputAction.next,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Llene este campo";
+                      }
+                      return null;
+                    },
+                  ),
                 ),
-                focusNode: userNameFocus,
-                onEditingComplete: () => requestFocus(context, passwordFocus),
-                textInputAction: TextInputAction.next,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Llene este campo";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Contraseña',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 16),
+                Container(
+                  color: const Color.fromARGB(255, 244, 247, 244), 
+                  child: TextFormField(
+                    controller: passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Contraseña',
+                      border: OutlineInputBorder(),
+                    ),
+                    focusNode: passwordFocus,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Llene este campo";
+                      }
+                      return null;
+                    },
+                  ),
                 ),
-                focusNode: passwordFocus,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Llene este campo";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 32),
-              ElevatedButton(
-                onPressed: _login,
-                child: const Text('Iniciar Sesión'),
-              ),
-            ],
+                const SizedBox(height: 32),
+                ElevatedButton(
+                  onPressed: _login,
+                  child: const Text('Iniciar Sesión'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
