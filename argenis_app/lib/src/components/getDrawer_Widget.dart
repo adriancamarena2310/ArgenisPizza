@@ -12,7 +12,7 @@ class GetDrawer extends StatelessWidget {
           UserAccountsDrawerHeader(
             accountName: Text(
               user?.userName ?? "Invitado",
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
             ),
             accountEmail: Text(user?.email ?? "invitado@example.com"),
             currentAccountPicture: Row(

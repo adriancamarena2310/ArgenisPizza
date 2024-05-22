@@ -37,60 +37,56 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
-                        Row(
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.asset(
+                            pizzas[index].image,
+                            height: 150,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(width: 40),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.asset(
-                                pizzas[index].image,
-                                height: 150,
-                                fit: BoxFit.cover,
-                              ),
+                            Text(
+                              pizzas[index].name,
+                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                             ),
-                            const SizedBox(width: 40),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            const SizedBox(height: 8),
+                            Text(
+                              "\$${pizzas[index].price.toStringAsFixed(2)}",
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  pizzas[index].name,
-                                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      if (quantities[index] > 0) {
+                                        quantities[index]--;
+                                        pizzas[index].cantidad--;
+                                      }
+                                    });
+                                  },
+                                  icon: const Icon(Icons.remove),
                                 ),
-                                const SizedBox(height: 8),
                                 Text(
-                                  "\$${pizzas[index].price.toStringAsFixed(2)}",
-                                  style: const TextStyle(fontSize: 16),
+                                  quantities[index].toString(),
+                                  style: const TextStyle(fontSize: 18),
                                 ),
-                                const SizedBox(height: 8),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          if (quantities[index] > 0) {
-                                            quantities[index]--;
-                                            pizzas[index].cantidad--;
-                                          }
-                                        });
-                                      },
-                                      icon: const Icon(Icons.remove),
-                                    ),
-                                    Text(
-                                      quantities[index].toString(),
-                                      style: const TextStyle(fontSize: 18),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          if (quantities[index] < 10) {
-                                            quantities[index]++;
-                                            pizzas[index].cantidad++;
-                                          }
-                                        });
-                                      },
-                                      icon: const Icon(Icons.add),
-                                    ),
-                                  ],
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      if (quantities[index] < 10) {
+                                        quantities[index]++;
+                                        pizzas[index].cantidad++;
+                                      }
+                                    });
+                                  },
+                                  icon: const Icon(Icons.add),
                                 ),
                               ],
                             ),
@@ -133,5 +129,11 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
         total += (pizzas[i].cantidad * pizzas[i].price);
       }
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    total = 0;
   }
 }
