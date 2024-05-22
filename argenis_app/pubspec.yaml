@@ -67,6 +67,11 @@ flutter:
   - images/users/chikil.jpg
   - images/users/camarena.jpg
   - images/users/ayalax.jpg
+  - images/pizzas/argeniss.jpg
+  - images/pizzas/cuatro.jpg
+  - images/pizzas/hawa.jpg
+  - images/pizzas/peperoni.jpg
+  - images/pizzas/vege.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
