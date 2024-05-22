@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:argenis_app/src/models/calcular_model.dart';
 import 'package:argenis_app/src/models/pizzas_model.dart';
 import 'package:flutter/material.dart';
@@ -128,6 +130,42 @@ class _HomeTiendaScreenState extends State<HomeTiendaScreen> {
   void _calcularTotal() {
     setState(() {
       total = modelCalcular.calcularTotal(pizzas);
+      _AlertDialog(context);
     });
   }
+
+   // ignore: non_constant_identifier_names
+   void _AlertDialog(BuildContext context){
+    showDialog(
+      context: context, 
+      builder: (BuildContext context){
+        var random = generateRandomCode();
+        return  AlertDialog(
+          title: const Text("Recibo"),
+          content: Text("Pasa a buscar tus pizzas con el codigo: $random \nNo olvides llevar tu dinero son: $total dolares"),
+          actions: [
+              TextButton(
+              child: const Text("Entendido"),
+              onPressed: (){
+                Navigator.pop(context);
+              }
+              )
+          ],
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        );
+      },
+      barrierDismissible: false
+      );
+  }
+
+String generateRandomCode() {
+  const charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  final random = Random.secure();
+  const codeLength = 6;
+  final codeUnits = List.generate(codeLength, (_) {
+    return charset.codeUnitAt(random.nextInt(charset.length));
+  });
+  return String.fromCharCodes(codeUnits);
+}
+
 }

@@ -15,7 +15,7 @@ class Pizza {
  final List<Pizza> pizzas = [
     Pizza(
       name: "Especial Argenis", 
-      price: 8.99, 
+      price: 99.99, 
       image: "images/pizzas/argeniss.jpg", 
       cantidad: 0
       ),
