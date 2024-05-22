@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:argenis_app/src/models/user_model.dart';
 import 'package:argenis_app/src/screens/Home_Domicilio_Screen.dart';
+import 'package:argenis_app/src/screens/Register_Screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -41,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  color: const Color.fromARGB(255, 248, 249, 248), 
+                  color: const Color.fromARGB(255, 248, 249, 248),
                   child: TextFormField(
                     controller: userNameController,
                     decoration: const InputDecoration(
@@ -61,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 16),
                 Container(
-                  color: const Color.fromARGB(255, 244, 247, 244), 
+                  color: const Color.fromARGB(255, 244, 247, 244),
                   child: TextFormField(
                     controller: passwordController,
                     obscureText: true,
@@ -82,6 +83,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 ElevatedButton(
                   onPressed: _login,
                   child: const Text('Iniciar Sesión'),
+                ),
+                const SizedBox(height: 8), // Espacio entre los botones
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RegisterScreen()),
+                    );
+                  },
+                  child: const Text('Registrarse'),
                 ),
               ],
             ),

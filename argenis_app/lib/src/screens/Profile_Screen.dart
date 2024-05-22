@@ -1,13 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:argenis_app/src/models/user_model.dart';
 import 'package:argenis_app/src/screens/Home_Domicilio_Screen.dart';
-import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
   final Usuario? user;
   const ProfileScreen(this.user, {Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
@@ -23,34 +22,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         title: const Text('Profile'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextFormField(
-              controller: userNameController,
-              decoration: const InputDecoration(labelText: 'User Name'),
-            ),
-            TextFormField(
-              controller: passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-            ),
-            TextFormField(
-              controller: emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
-            ),
-            TextFormField(
-              controller: numberController,
-              decoration: const InputDecoration(labelText: 'Number'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _saveChanges();
-              },
-              child: const Text('Save'),
-            ),
-          ],
+      body: Container(
+        color: Color.fromARGB(255, 249, 198, 45), // Fondo naranja
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextFormField(
+                controller: userNameController,
+                decoration: const InputDecoration(labelText: 'User Name'),
+              ),
+              TextFormField(
+                controller: passwordController,
+                decoration: const InputDecoration(labelText: 'Password'),
+              ),
+              TextFormField(
+                controller: emailController,
+                decoration: const InputDecoration(labelText: 'Email'),
+              ),
+              TextFormField(
+                controller: numberController,
+                decoration: const InputDecoration(labelText: 'Number'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _saveChanges();
+                },
+                child: const Text('Save'),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -73,7 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     numberController.dispose();
     super.dispose();
   }
-  
+
   void _saveChanges() {
     if(widget.user != null){
       setState(() {

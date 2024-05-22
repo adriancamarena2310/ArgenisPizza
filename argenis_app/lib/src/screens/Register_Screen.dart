@@ -30,91 +30,90 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: AppBar(
         title: const Text('Pizzeria Argenis - Registro'),
       ),
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            "images/assets/fondo.jpg",
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/assets/fondo.jpg"),
             fit: BoxFit.cover,
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: formKey,
-              child: Column(
-                children: <Widget>[
-                  TextFormField(
-                    controller: nameController,
-                    decoration: const InputDecoration(
-                      labelText: "Nombre:",
-                      fillColor: Colors.white,
-                      filled: true,
-                    ),
-                    onSaved: (value) {
-                      nameValue = value!;
-                    },
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Llene este campo";
-                      }
-                      return null;
-                    },
-                    focusNode: nameFocus,
-                    onEditingComplete: () => requestFocus(context, lastNameFocus),
-                    textInputAction: TextInputAction.next,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  controller: nameController,
+                  decoration: const InputDecoration(
+                    labelText: "Nombre:",
+                    fillColor: Colors.white,
+                    filled: true,
                   ),
-                  TextFormField(
-                    controller: phoneController,
-                    decoration: const InputDecoration(
-                      labelText: "Número de teléfono:",
-                      fillColor: Colors.white,
-                      filled: true,
-                    ),
-                    keyboardType: TextInputType.phone,
-                    onSaved: (value) {
-                      phoneValue = value!;
-                    },
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Llene este campo";
-                      }
-                      return null;
-                    },
-                    focusNode: phoneFocus,
-                    onEditingComplete: () => requestFocus(context, emailFocus),
-                    textInputAction: TextInputAction.next,
+                  onSaved: (value) {
+                    nameValue = value!;
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Llene este campo";
+                    }
+                    return null;
+                  },
+                  focusNode: nameFocus,
+                  onEditingComplete: () => requestFocus(context, lastNameFocus),
+                  textInputAction: TextInputAction.next,
+                ),
+                TextFormField(
+                  controller: phoneController,
+                  decoration: const InputDecoration(
+                    labelText: "Número de teléfono:",
+                    fillColor: Colors.white,
+                    filled: true,
                   ),
-                  TextFormField(
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                      labelText: "Correo electrónico:",
-                      fillColor: Colors.white,
-                      filled: true,
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    onSaved: (value) {
-                      emailValue = value!;
-                    },
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Llene este campo";
-                      }
-                      return null;
-                    },
-                    focusNode: emailFocus,
-                    textInputAction: TextInputAction.done,
+                  keyboardType: TextInputType.phone,
+                  onSaved: (value) {
+                    phoneValue = value!;
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Llene este campo";
+                    }
+                    return null;
+                  },
+                  focusNode: phoneFocus,
+                  onEditingComplete: () => requestFocus(context, emailFocus),
+                  textInputAction: TextInputAction.next,
+                ),
+                TextFormField(
+                  controller: emailController,
+                  decoration: const InputDecoration(
+                    labelText: "Correo electrónico:",
+                    fillColor: Colors.white,
+                    filled: true,
                   ),
-                  ElevatedButton(
-                    child: const Text('Registrar'),
-                    onPressed: () {
-                      _showHomeScreen(context);
-                    },
-                  ),
-                ],
-              ),
+                  keyboardType: TextInputType.emailAddress,
+                  onSaved: (value) {
+                    emailValue = value!;
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Llene este campo";
+                    }
+                    return null;
+                  },
+                  focusNode: emailFocus,
+                  textInputAction: TextInputAction.done,
+                ),
+                ElevatedButton(
+                  child: const Text('Registrar'),
+                  onPressed: () {
+                    _showHomeScreen(context);
+                  },
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
