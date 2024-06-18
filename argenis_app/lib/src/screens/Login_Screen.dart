@@ -1,20 +1,24 @@
+import 'package:argenis_app/src/bloc/loggin_bloc.dart';
+import 'package:argenis_app/src/bloc/provider.dart';
+import 'package:argenis_app/src/providers/usuario_provider.dart';
+import 'package:argenis_app/src/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:argenis_app/src/models/user_model.dart';
-import 'package:argenis_app/src/screens/Home_Domicilio_Screen.dart';
-import 'package:argenis_app/src/screens/Register_Screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
+  
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final userNameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  late FocusNode userNameFocus;
+  final usuarioProvider = UsuarioProvider();
+
+  late FocusNode emailFocus;
   late FocusNode passwordFocus;
 
   final formKey = GlobalKey<FormState>();
@@ -26,118 +30,161 @@ class _LoginScreenState extends State<LoginScreen> {
         title: const Text('Inicio de Sesión'),
         backgroundColor: Colors.deepOrange,
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("images/assets/Font.jpg"),
-            fit: BoxFit.cover,
+      body: _loginForm(context),
+    );
+  }
+
+
+Widget _loginForm(BuildContext context) {
+    final bloc = Provider.of(context); // Asegúrate de obtener el LoginBloc
+    final size = MediaQuery.of(context).size;
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SafeArea(
+            child: Container(
+              height: 180.0,
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  color: const Color.fromARGB(255, 248, 249, 248),
-                  child: TextFormField(
-                    controller: userNameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Usuario',
-                      border: OutlineInputBorder(),
-                    ),
-                    focusNode: userNameFocus,
-                    onEditingComplete: () => requestFocus(context, passwordFocus),
-                    textInputAction: TextInputAction.next,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Llene este campo";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  color: const Color.fromARGB(255, 244, 247, 244),
-                  child: TextFormField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Contraseña',
-                      border: OutlineInputBorder(),
-                    ),
-                    focusNode: passwordFocus,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Llene este campo";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                const SizedBox(height: 32),
-                ElevatedButton(
-                  onPressed: _login,
-                  child: const Text('Iniciar Sesión'),
-                ),
-                const SizedBox(height: 8), // Espacio entre los botones
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const RegisterScreen()),
-                    );
-                  },
-                  child: const Text('Registrarse'),
+          Container(
+            width: size.width * 0.85,
+            margin: const EdgeInsets.symmetric(vertical: 30.0),
+            padding: const EdgeInsets.symmetric(vertical: 50.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5.0),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 3.0,
+                  offset: Offset(0.0, 5.0),
+                  spreadRadius: 3.0,
                 ),
               ],
             ),
+            child: Column(
+              children: [
+                const Text("Ingreso", style: TextStyle(fontSize: 20.0)),
+                const SizedBox(height: 60.0),
+                _crearEmail(bloc!),
+                const SizedBox(height: 30.0),
+                _crearPassword(bloc),
+                const SizedBox(height: 30.0),
+                _crearBoton(bloc),
+              ],
+            ),
           ),
-        ),
+          TextButton(   
+           child: const Text("Crear cuenta nueva"),
+           onPressed: () => Navigator.pushReplacementNamed(context, "/register"),
+          ),
+          const SizedBox(height: 100.0),
+        ],
       ),
     );
   }
 
-  
-  void _login() {
-    if (formKey.currentState!.validate()) {
-      formKey.currentState!.save();
 
-      String userNameValue = userNameController.text;
-      String passwordValue = passwordController.text;
-
-      var existe = verificarUsuario(usuarios, userNameValue, passwordValue);
-      var user = obtenerUsuarioPorUserName(usuarios, userNameValue);
-      if (existe) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HomeDomicilioScreen(user: user)),
+   Widget _crearEmail(LoginBloc bloc) {
+    return StreamBuilder<String>(
+      stream: bloc.emailStream,
+      builder: (context, snapshot) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: TextField(
+            controller: emailController,
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              icon: const Icon(Icons.alternate_email, color: Colors.deepPurple),
+              hintText: "ejemplo@correo.com",
+              labelText: "Correo electrónico",
+              counterText: snapshot.data,
+              errorText: snapshot.error as String?,
+            ),
+            onChanged: bloc.changeEmail,
+            focusNode: emailFocus,
+            onEditingComplete: () => requestFocus(context, passwordFocus),
+          ),
         );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Usuario o contraseña incorrectos')),
-        );
-      }
-    }
+      },
+    );
   }
+
+  Widget _crearPassword(LoginBloc bloc) {
+    return StreamBuilder<String>(
+      stream: bloc.paswordStream,
+      builder: (context, snapshot) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: TextField(
+            controller: passwordController,
+            obscureText: true,
+            decoration: InputDecoration(
+              icon: const Icon(Icons.lock_outline, color: Colors.deepPurple),
+              labelText: "Contraseña",
+              counterText: snapshot.data,
+              errorText: snapshot.error as String?,
+            ),
+            onChanged: bloc.changePassword,
+            focusNode: passwordFocus,
+          ),
+        );
+      },
+    );
+  }
+
+   Widget _crearBoton(LoginBloc bloc) {
+    return StreamBuilder<bool>(
+      stream: bloc.formValidStream,
+      builder: (context, snapshot) {
+        return ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.deepPurple,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            elevation: 0.0,
+            textStyle: const TextStyle(color: Colors.white),
+          ),
+          onPressed: snapshot.hasData ? () => _login(bloc, context) : null,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
+            child: const Text("Ingresar", style: TextStyle(color: Colors.white),),
+          ),
+        );
+      },
+    );
+  }
+
+   void _login(LoginBloc bloc, BuildContext context) async {
+    
+    Map info = await usuarioProvider.login(bloc.email, bloc.password);
+
+    if( info["ok"]){
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacementNamed(context, "/homeDomicilio");
+    }else{
+      // ignore: use_build_context_synchronously
+      mostrarAlerta(context, info["mensaje"]);
+    }
+
+  }
+
 
   
   @override
   void initState() {
     super.initState();
-    userNameFocus = FocusNode();
+    emailFocus = FocusNode();
     passwordFocus = FocusNode();
   }
 
   @override
   void dispose() {
-    userNameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
-    userNameFocus.dispose();
+    emailFocus.dispose();
     passwordFocus.dispose();
     super.dispose();
   }

@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:argenis_app/src/models/user_model.dart';
+/*import 'package:flutter/material.dart';
 import 'package:argenis_app/src/screens/Profile_Screen.dart';
 
 class GetDrawer extends StatelessWidget {
   const GetDrawer({Key? key}) : super(key: key);
 
-  static Widget getDrawer(BuildContext context, Usuario? user) {
+  static Widget getDrawer(BuildContext context) {
     return Drawer(
       child: ListView(
         children: <Widget>[
@@ -69,3 +68,4 @@ class GetDrawer extends StatelessWidget {
     return Container();
   }
 }
+*/

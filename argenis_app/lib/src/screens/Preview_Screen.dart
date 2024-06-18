@@ -1,13 +1,15 @@
-import 'package:argenis_app/src/screens/Home_Tienda_Screen.dart';
-import 'package:argenis_app/src/screens/Login_Screen.dart';
+import 'package:argenis_app/src/providers/usuario_provider.dart';
 import 'package:flutter/material.dart';
 
 
 class PreviewScreen extends StatelessWidget {
-  const PreviewScreen({super.key});
+  PreviewScreen({super.key});
+
+  final usuarioProvider = UsuarioProvider();
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -20,20 +22,14 @@ class PreviewScreen extends StatelessWidget {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomeTiendaScreen()),
-                  );
+                  _entrarHomeTienda(context);
                 },
                 child: const Text('Buscar en tienda'),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  );
+                  Navigator.pushReplacementNamed(context, "/homeDomicilio");
                 },
                 child: const Text('Entrega a domicilio'),
               ),
@@ -43,4 +39,17 @@ class PreviewScreen extends StatelessWidget {
       ),
     );
   }
+
+
+     void _entrarHomeTienda(BuildContext context) async {
+    
+    Map info = await usuarioProvider.login("test@test.com", "1234567");
+
+    if( info["ok"]){
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacementNamed(context, "/homeTienda");
+    }
+
+  }
+
 }

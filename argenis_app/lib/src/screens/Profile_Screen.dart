@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:argenis_app/src/models/user_model.dart';
 import 'package:argenis_app/src/screens/Home_Domicilio_Screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final Usuario? user;
-  const ProfileScreen(this.user, {Key? key}) : super(key: key);
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -122,10 +120,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    userNameController = TextEditingController(text: widget.user?.userName);
-    passwordController = TextEditingController(text: widget.user?.password);
-    emailController = TextEditingController(text: widget.user?.email);
-    numberController = TextEditingController(text: widget.user?.number);
+    //userNameController = TextEditingController(text: widget.user?.userName);
+    //passwordController = TextEditingController(text: widget.user?.password);
+    //emailController = TextEditingController(text: widget.user?.email);
+    //numberController = TextEditingController(text: widget.user?.number);
 
     userNameFocus = FocusNode();
     passwordFocus = FocusNode();
@@ -153,6 +151,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _saveChanges() {
+    /*
     if(widget.user != null){
       setState(() {
         widget.user!.userName = userNameController.text;
@@ -167,12 +166,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       // Realiza la animación de transición
       Navigator.of(context).push(_createRoute());
-    }
+    }*/
   }
 
   Route _createRoute() {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => HomeDomicilioScreen(user: widget.user),
+      pageBuilder: (context, animation, secondaryAnimation) => HomeDomicilioScreen(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(1.0, 0.0);
         const end = Offset.zero;

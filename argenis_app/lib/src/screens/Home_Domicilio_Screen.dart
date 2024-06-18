@@ -1,18 +1,19 @@
+import 'package:argenis_app/src/models/producto_model.dart';
+import 'package:argenis_app/src/providers/productos_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:argenis_app/src/components/getDrawer_Widget.dart';
-import 'package:argenis_app/src/models/pizzas_model.dart';
-import 'package:argenis_app/src/models/user_model.dart';
 
 class HomeDomicilioScreen extends StatefulWidget {
-  final Usuario? user;
-  const HomeDomicilioScreen({Key? key, required this.user}) : super(key: key);
+  const HomeDomicilioScreen({super.key});
 
   @override
-  _HomeDomicilioScreenState createState() => _HomeDomicilioScreenState();
+  State<HomeDomicilioScreen> createState() => _HomeDomicilioScreenState();
 }
 
 class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
+
   final _scaffkey = GlobalKey<ScaffoldState>();
+   final productosProvider = ProductosProvider();
 
   double total = 0.0;
   List<int> quantities = List<int>.filled(5, 0);
@@ -25,88 +26,79 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
         title: const Text("Argenis"),
         backgroundColor: Colors.deepOrange,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: pizzas.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  margin: const EdgeInsets.all(8.0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset(
-                            pizzas[index].image,
-                            height: 150,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        const SizedBox(width: 40),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              pizzas[index].name,
-                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              "\$${pizzas[index].price.toStringAsFixed(2)}",
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      if (quantities[index] > 0) {
-                                        quantities[index]--;
-                                        pizzas[index].cantidad--;
-                                      }
-                                    });
-                                  },
-                                  icon: const Icon(Icons.remove),
-                                ),
-                                Text(
-                                  quantities[index].toString(),
-                                  style: const TextStyle(fontSize: 18),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      if (quantities[index] < 10) {
-                                        quantities[index]++;
-                                        pizzas[index].cantidad++;
-                                      }
-                                    });
-                                  },
-                                  icon: const Icon(Icons.add),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+      body: _crearListado(),
+      //drawer: GetDrawer.getDrawer(context),
+    );
+  }
+
+  Widget _crearListado(){
+    return FutureBuilder(
+      future: productosProvider.cargarProductos(), 
+      builder: (BuildContext context, AsyncSnapshot<List<ProductoModel>> snapshot){
+        if( snapshot.hasData ){
+          final productos = snapshot.data;
+          return ListView.builder(
+            itemCount: productos?.length,
+            itemBuilder: (context, i) => _crearItem(context, productos![i]),
+          );
+        }else{
+          return const Center( child:  CircularProgressIndicator());
+        }
+      }
+      );
+  }
+
+  Widget _crearItem(BuildContext context, ProductoModel producto){
+    return Dismissible(
+      key: UniqueKey(),
+      background: Container(
+        color: Colors.red,
+      ),
+      onDismissed: (direction){
+        productosProvider.borrarProducto(producto.id!);
+      },
+      child: Card(
+        child: Column(
+          children: [
+            (producto.fotoUrl == null) 
+            ? const Image(image: AssetImage("images/pizzas/argeniss.jpg"))
+            : FadeInImage(
+              image: NetworkImage( producto.fotoUrl!),
+              placeholder: const AssetImage("images/assets/fondoPreview.gif"),
+              height: 300.0,
+              width: double.infinity,
+              fit: BoxFit.cover,
             ),
-          ),
-          Container(
+             ListTile(
+        title: Text("${producto.titulo}  -  ${producto.valor}"),
+        subtitle: Text("${producto.id}"),
+        onTap: () async {
+          Navigator.pushNamed(context, "producto", arguments: producto);
+          setState(() {});
+        },
+      ),
+          ],
+        ),
+      )
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    total = 0;
+  }
+}
+
+/*
+Container(
             color: Colors.deepOrange[500],
             padding: const EdgeInsets.all(16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
-                  onPressed: _calcularTotal,
+                  onPressed: (){},//_calcularTotal,
                   child: const Text("Calcular Total"),
                 ),
                 Text(
@@ -116,24 +108,4 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
               ],
             ),
           ),
-        ],
-      ),
-      drawer: GetDrawer.getDrawer(context, widget.user),
-    );
-  }
-
-  void _calcularTotal() {
-    setState(() {
-      total = 0.0;
-      for (int i = 0; i < pizzas.length; i++) {
-        total += (pizzas[i].cantidad * pizzas[i].price);
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    total = 0;
-  }
-}
+ */

@@ -1,5 +1,7 @@
-import 'package:argenis_app/src/models/user_model.dart';
-import 'package:argenis_app/src/screens/Login_Screen.dart';
+import 'package:argenis_app/src/bloc/loggin_bloc.dart';
+import 'package:argenis_app/src/bloc/provider.dart';
+import 'package:argenis_app/src/providers/usuario_provider.dart';
+import 'package:argenis_app/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -15,6 +17,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late TextEditingController emailController;
   late TextEditingController numberController;
 
+  final usuarioProvider = UsuarioProvider();
+
   late FocusNode userNameFocus;
   late FocusNode passwordFocus;
   late FocusNode emailFocus;
@@ -26,137 +30,147 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pizzeria Argenis - Registro'),
+        title: const Text('Registro de cuenta'),
         backgroundColor: Colors.deepOrange,
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("images/assets/Font.jpg"),
-            fit: BoxFit.cover,
+      body: _loginForm(context),
+    );
+  }
+
+  Widget _loginForm(BuildContext context) {
+    final bloc = Provider.of(context); // Asegúrate de obtener el LoginBloc
+    final size = MediaQuery.of(context).size;
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SafeArea(
+            child: Container(
+              height: 180.0,
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  color: const Color.fromARGB(255, 248, 249, 248),
-                  child: TextFormField(
-                    controller: userNameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Nombre de usuario',
-                      border: OutlineInputBorder(),
-                    ),
-                    focusNode: userNameFocus,
-                    onEditingComplete: () =>
-                        requestFocus(context, passwordFocus),
-                    textInputAction: TextInputAction.next,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Llene este campo";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  color: const Color.fromARGB(255, 248, 249, 248),
-                  child: TextFormField(
-                    controller: passwordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Contraseña',
-                      border: OutlineInputBorder(),
-                    ),
-                    focusNode: passwordFocus,
-                    onEditingComplete: () => requestFocus(context, emailFocus),
-                    textInputAction: TextInputAction.next,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Llene este campo";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  color: const Color.fromARGB(255, 248, 249, 248),
-                  child: TextFormField(
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Correo Electronico',
-                      border: OutlineInputBorder(),
-                    ),
-                    focusNode: emailFocus,
-                    keyboardType: TextInputType.emailAddress,
-                    onEditingComplete: () => requestFocus(context, numberFocus),
-                    textInputAction: TextInputAction.next,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Llene este campo";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  color: const Color.fromARGB(255, 248, 249, 248),
-                  child: TextFormField(
-                    controller: numberController,
-                    decoration: const InputDecoration(
-                      labelText: 'Número de telefono',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                    focusNode: numberFocus,
-                    textInputAction: TextInputAction.next,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Llene este campo";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                const SizedBox(height: 32),
-                ElevatedButton(
-                  onPressed: () {
-                    _newUser();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginScreen(),
-                      ),
-                    );
-                  },
-                  child: const Text('Registrarse'),
+          Container(
+            width: size.width * 0.85,
+            margin: const EdgeInsets.symmetric(vertical: 30.0),
+            padding: const EdgeInsets.symmetric(vertical: 50.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5.0),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 3.0,
+                  offset: Offset(0.0, 5.0),
+                  spreadRadius: 3.0,
                 ),
               ],
             ),
+            child: Column(
+              children: [
+                const Text("Crear cuenta", style: TextStyle(fontSize: 20.0)),
+                const SizedBox(height: 60.0),
+                _crearEmail(bloc!),
+                const SizedBox(height: 30.0),
+                _crearPassword(bloc),
+                const SizedBox(height: 30.0),
+                _crearBoton(bloc),
+              ],
+            ),
           ),
-        ),
+          TextButton(   
+           child: const Text("¿Ya tienes cuenta? Login"),
+           onPressed: () => Navigator.pushReplacementNamed(context, "/login"),
+          ),
+          const SizedBox(height: 100.0),
+        ],
       ),
     );
   }
 
-  void _newUser() {
-    Usuario? newUser = Usuario(
-      id: ultimoUsuario()!.id + 1,
-      userName: userNameController.text,
-      password: passwordController.text,
-      email: emailController.text,
-      number: numberController.text,
-      image: "images/assets/argenis.jpg",
+  Widget _crearEmail(LoginBloc bloc) {
+    return StreamBuilder<String>(
+      stream: bloc.emailStream,
+      builder: (context, snapshot) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: TextField(
+            controller: emailController,
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              icon: const Icon(Icons.alternate_email, color: Colors.deepPurple),
+              hintText: "ejemplo@correo.com",
+              labelText: "Correo electrónico",
+              counterText: snapshot.data,
+              errorText: snapshot.error as String?,
+            ),
+            onChanged: bloc.changeEmail,
+            focusNode: emailFocus,
+            onEditingComplete: () => requestFocus(context, passwordFocus),
+          ),
+        );
+      },
     );
-    
-    usuarios.add(newUser);
   }
+
+  Widget _crearPassword(LoginBloc bloc) {
+    return StreamBuilder<String>(
+      stream: bloc.paswordStream,
+      builder: (context, snapshot) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: TextField(
+            controller: passwordController,
+            obscureText: true,
+            decoration: InputDecoration(
+              icon: const Icon(Icons.lock_outline, color: Colors.deepPurple),
+              labelText: "Contraseña",
+              counterText: snapshot.data,
+              errorText: snapshot.error as String?,
+            ),
+            onChanged: bloc.changePassword,
+            focusNode: passwordFocus,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _crearBoton(LoginBloc bloc) {
+    return StreamBuilder<bool>(
+      stream: bloc.formValidStream,
+      builder: (context, snapshot) {
+        return ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.deepPurple,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            elevation: 0.0,
+            textStyle: const TextStyle(color: Colors.white),
+          ),
+          onPressed: snapshot.hasData ? () => _register(bloc, context) : null,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
+            child: const Text("Ingresar", style: TextStyle(color: Colors.white),),
+          ),
+        );
+      },
+    );
+  }
+
+  void _register(LoginBloc bloc, BuildContext context) async {
+
+    Map info = await usuarioProvider.nuevoUsuario(bloc.email, bloc.password);
+
+    if( info["ok"]){
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacementNamed(context, "/homeDomicilio");
+    }else{
+      // ignore: use_build_context_synchronously
+      mostrarAlerta(context, info["mensaje"]);
+    }
+  }
+
 
   @override
   void initState() {

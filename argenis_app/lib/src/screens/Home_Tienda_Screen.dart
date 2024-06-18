@@ -1,20 +1,20 @@
-import 'dart:math';
-
-import 'package:argenis_app/src/models/calcular_model.dart';
-import 'package:argenis_app/src/models/pizzas_model.dart';
+import 'package:argenis_app/src/models/producto_model.dart';
+import 'package:argenis_app/src/providers/productos_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:argenis_app/src/components/getDrawer_Widget.dart';
 
-class HomeTiendaScreen extends StatefulWidget {
-  const HomeTiendaScreen({super.key});
+class HomeDomicilioScreen extends StatefulWidget {
+  const HomeDomicilioScreen({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _HomeTiendaScreenState createState() => _HomeTiendaScreenState();
+  _HomeDomicilioScreenState createState() => _HomeDomicilioScreenState();
 }
 
-class _HomeTiendaScreenState extends State<HomeTiendaScreen> {
+class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
+
   final _scaffkey = GlobalKey<ScaffoldState>();
-  final ModelCalcular modelCalcular = ModelCalcular(); 
+   final productosProvider = ProductosProvider();
 
   double total = 0.0;
   List<int> quantities = List<int>.filled(5, 0);
@@ -27,88 +27,73 @@ class _HomeTiendaScreenState extends State<HomeTiendaScreen> {
         title: const Text("Argenis"),
         backgroundColor: Colors.deepOrange,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: pizzas.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  margin: const EdgeInsets.all(8.0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset(
-                            pizzas[index].image,
-                            height: 150,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        const SizedBox(width: 40),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              pizzas[index].name,
-                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              "\$${pizzas[index].price.toStringAsFixed(2)}",
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      if (quantities[index] > 0) {
-                                        quantities[index]--;
-                                        pizzas[index].cantidad--;
-                                      }
-                                    });
-                                  },
-                                  icon: const Icon(Icons.remove),
-                                ),
-                                Text(
-                                  quantities[index].toString(),
-                                  style: const TextStyle(fontSize: 18),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      if (quantities[index] < 10) {
-                                        quantities[index]++;
-                                        pizzas[index].cantidad++;
-                                      }
-                                    });
-                                  },
-                                  icon: const Icon(Icons.add),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+      body: _crearListado(),
+      //drawer: GetDrawer.getDrawer(context),
+    );
+  }
+
+  Widget _crearListado(){
+    return FutureBuilder(
+      future: productosProvider.cargarProductos(), 
+      builder: (BuildContext context, AsyncSnapshot<List<ProductoModel>> snapshot){
+        if( snapshot.hasData ){
+          final productos = snapshot.data;
+          return ListView.builder(
+            itemCount: productos?.length,
+            itemBuilder: (context, i) => _crearItem(context, productos![i]),
+          );
+        }else{
+          return const Center( child:  CircularProgressIndicator());
+        }
+      }
+      );
+  }
+
+  Widget _crearItem(BuildContext context, ProductoModel producto){
+    return Dismissible(
+      key: UniqueKey(),
+      background: Container(
+        color: Colors.red,
+      ),
+      onDismissed: (direction){
+        productosProvider.borrarProducto(producto.id!);
+      },
+      child: Card(
+        child: Column(
+          children: [
+            (producto.fotoUrl == null) 
+            ? const Image(image: AssetImage("images/pizzas/argeniss.jpg"))
+            : FadeInImage(
+              image: NetworkImage( producto.fotoUrl!),
+              placeholder: const AssetImage("images/assets/fondoPreview.gif"),
+              height: 300.0,
+              width: double.infinity,
+              fit: BoxFit.cover,
             ),
-          ),
-          Container(
+             ListTile(
+        title: Text("${producto.titulo}  -  ${producto.valor}"),
+        subtitle: Text("${producto.id}"),
+        onTap: () async {
+          Navigator.pushNamed(context, "producto", arguments: producto);
+          setState(() {});
+        },
+      ),
+          ],
+        ),
+      )
+    );
+  }
+}
+
+/*
+Container(
             color: Colors.deepOrange[500],
             padding: const EdgeInsets.all(16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
-                  onPressed: _calcularTotal,
+                  onPressed: (){},//_calcularTotal,
                   child: const Text("Calcular Total"),
                 ),
                 Text(
@@ -118,50 +103,4 @@ class _HomeTiendaScreenState extends State<HomeTiendaScreen> {
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  void _calcularTotal() {
-    setState(() {
-      total = modelCalcular.calcularTotal(pizzas);
-      _AlertDialog(context);
-    });
-  }
-
-   // ignore: non_constant_identifier_names
-   void _AlertDialog(BuildContext context){
-    showDialog(
-      context: context, 
-      builder: (BuildContext context){
-        var random = generateRandomCode();
-        return  AlertDialog(
-          title: const Text("Recibo"),
-          content: Text("Pasa a buscar tus pizzas con el codigo: $random \nNo olvides llevar tu dinero son: $total dolares"),
-          actions: [
-              TextButton(
-              child: const Text("Entendido"),
-              onPressed: (){
-                Navigator.pop(context);
-              }
-              )
-          ],
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        );
-      },
-      barrierDismissible: false
-      );
-  }
-
-String generateRandomCode() {
-  const charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  final random = Random.secure();
-  const codeLength = 6;
-  final codeUnits = List.generate(codeLength, (_) {
-    return charset.codeUnitAt(random.nextInt(charset.length));
-  });
-  return String.fromCharCodes(codeUnits);
-}
-
-}
+ */
