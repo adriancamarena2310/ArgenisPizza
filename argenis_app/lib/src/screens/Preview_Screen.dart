@@ -29,7 +29,7 @@ class PreviewScreen extends StatelessWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, "/homeDomicilio");
+                  Navigator.pushReplacementNamed(context, "/login");
                 },
                 child: const Text('Entrega a domicilio'),
               ),

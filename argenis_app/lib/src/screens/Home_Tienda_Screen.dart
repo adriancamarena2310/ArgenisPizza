@@ -3,15 +3,15 @@ import 'package:argenis_app/src/providers/productos_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:argenis_app/src/components/getDrawer_Widget.dart';
 
-class HomeDomicilioScreen extends StatefulWidget {
-  const HomeDomicilioScreen({Key? key}) : super(key: key);
+class HomeTiendaScreem extends StatefulWidget {
+  const HomeTiendaScreem({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _HomeDomicilioScreenState createState() => _HomeDomicilioScreenState();
+  _HomeTiendaScreemState createState() => _HomeTiendaScreemState();
 }
 
-class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
+class _HomeTiendaScreemState extends State<HomeTiendaScreem> {
 
   final _scaffkey = GlobalKey<ScaffoldState>();
    final productosProvider = ProductosProvider();
@@ -74,7 +74,7 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
         title: Text("${producto.titulo}  -  ${producto.valor}"),
         subtitle: Text("${producto.id}"),
         onTap: () async {
-          Navigator.pushNamed(context, "producto", arguments: producto);
+          Navigator.pushNamed(context, "/producto", arguments: producto);
           setState(() {});
         },
       ),

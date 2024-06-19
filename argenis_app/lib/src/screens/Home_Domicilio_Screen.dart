@@ -73,7 +73,7 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
         title: Text("${producto.titulo}  -  ${producto.valor}"),
         subtitle: Text("${producto.id}"),
         onTap: () async {
-          Navigator.pushNamed(context, "producto", arguments: producto);
+          Navigator.pushNamed(context, "/producto", arguments: producto);
           setState(() {});
         },
       ),
