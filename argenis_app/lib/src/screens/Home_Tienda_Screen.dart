@@ -25,7 +25,7 @@ class _HomeTiendaScreenState extends State<HomeTiendaScreen> {
       key: _scaffkey,
       appBar: AppBar(
         title: const Text("Argenis"),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Color.fromARGB(230, 152, 78, 8),
       ),
       body: Column(
         children: [
@@ -102,7 +102,7 @@ class _HomeTiendaScreenState extends State<HomeTiendaScreen> {
             ),
           ),
           Container(
-            color: Colors.deepOrange[500],
+            color: Color.fromARGB(255, 142, 72, 6),
             padding: const EdgeInsets.all(16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

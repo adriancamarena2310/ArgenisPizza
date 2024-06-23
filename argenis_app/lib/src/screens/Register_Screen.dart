@@ -27,12 +27,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pizzeria Argenis - Registro'),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Color.fromARGB(230, 127, 63, 3),
       ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/assets/Font.jpg"),
+            image: AssetImage("images/assets/fondo.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -44,12 +44,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  color: const Color.fromARGB(255, 248, 249, 248),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 248, 249, 248),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   child: TextFormField(
                     controller: userNameController,
                     decoration: const InputDecoration(
                       labelText: 'Nombre de usuario',
-                      border: OutlineInputBorder(),
+                      border: InputBorder.none,
                     ),
                     focusNode: userNameFocus,
                     onEditingComplete: () =>
@@ -65,12 +69,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: 16),
                 Container(
-                  color: const Color.fromARGB(255, 248, 249, 248),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 248, 249, 248),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   child: TextFormField(
                     controller: passwordController,
                     decoration: const InputDecoration(
                       labelText: 'Contraseña',
-                      border: OutlineInputBorder(),
+                      border: InputBorder.none,
                     ),
                     focusNode: passwordFocus,
                     onEditingComplete: () => requestFocus(context, emailFocus),
@@ -85,12 +93,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: 16),
                 Container(
-                  color: const Color.fromARGB(255, 248, 249, 248),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 248, 249, 248),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   child: TextFormField(
                     controller: emailController,
                     decoration: const InputDecoration(
-                      labelText: 'Correo Electronico',
-                      border: OutlineInputBorder(),
+                      labelText: 'Correo Electrónico',
+                      border: InputBorder.none,
                     ),
                     focusNode: emailFocus,
                     keyboardType: TextInputType.emailAddress,
@@ -106,12 +118,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: 16),
                 Container(
-                  color: const Color.fromARGB(255, 248, 249, 248),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 248, 249, 248),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   child: TextFormField(
                     controller: numberController,
                     decoration: const InputDecoration(
-                      labelText: 'Número de telefono',
-                      border: OutlineInputBorder(),
+                      labelText: 'Número de teléfono',
+                      border: InputBorder.none,
                     ),
                     keyboardType: TextInputType.number,
                     focusNode: numberFocus,

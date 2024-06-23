@@ -24,12 +24,12 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Inicio de Sesión'),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Color.fromARGB(230, 127, 63, 3),
       ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/assets/Font.jpg"),
+            image: AssetImage("images/assets/fondo.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -42,12 +42,16 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  color: const Color.fromARGB(255, 248, 249, 248),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 248, 249, 248),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   child: TextFormField(
                     controller: userNameController,
                     decoration: const InputDecoration(
                       labelText: 'Usuario',
-                      border: OutlineInputBorder(),
+                      border: InputBorder.none,
                     ),
                     focusNode: userNameFocus,
                     onEditingComplete: () => requestFocus(context, passwordFocus),
@@ -62,13 +66,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 16),
                 Container(
-                  color: const Color.fromARGB(255, 244, 247, 244),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 244, 247, 244),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   child: TextFormField(
                     controller: passwordController,
                     obscureText: true,
                     decoration: const InputDecoration(
                       labelText: 'Contraseña',
-                      border: OutlineInputBorder(),
+                      border: InputBorder.none,
                     ),
                     focusNode: passwordFocus,
                     validator: (value) {
@@ -102,7 +110,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  
   void _login() {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
@@ -125,7 +132,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  
   @override
   void initState() {
     super.initState();
