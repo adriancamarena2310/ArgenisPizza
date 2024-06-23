@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Inicio de Sesión'),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Color.fromARGB(255, 124, 74, 31),
       ),
       body: _loginForm(context),
     );

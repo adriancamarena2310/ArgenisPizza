@@ -25,7 +25,7 @@ class _HomeTiendaScreemState extends State<HomeTiendaScreem> {
       key: _scaffkey,
       appBar: AppBar(
         title: const Text("Argenis"),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Color.fromARGB(255, 122, 64, 24),
       ),
       body: _crearListado(),
       //drawer: GetDrawer.getDrawer(context),
