@@ -104,7 +104,7 @@ class _VerProductoScreenState extends State<VerProductoScreen> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: Image.asset(
-            'images/users/chikil.jpg',
+            'images/users/image.jpg',
             height: 300.0,
             width: double.infinity,
             fit: BoxFit.cover,

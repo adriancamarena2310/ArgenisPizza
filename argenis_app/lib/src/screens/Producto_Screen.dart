@@ -182,7 +182,7 @@ class _ProductoPageState extends State<ProductoPage> {
           height: 300.0,
         );
       }
-      return Image.asset('images/users/chikil.jpg');
+      return Image.asset('images/assets/image.jpg');
     }
   }
 

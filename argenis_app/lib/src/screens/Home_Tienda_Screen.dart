@@ -69,7 +69,7 @@ class _HomeTiendaScreemState extends State<HomeTiendaScreem> {
               Navigator.pushNamed(context, "/VerProducto", arguments: producto);
             },
             child: (producto.fotoUrl == null)
-                ? const Image(image: AssetImage("images/users/chikil.jpg"))
+                ? const Image(image: AssetImage("images/assets/image.jpg"))
                 : Container(
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey),

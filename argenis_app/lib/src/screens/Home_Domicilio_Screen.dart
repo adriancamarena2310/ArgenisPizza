@@ -65,12 +65,59 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
   }
 
   Widget _crearItem(BuildContext context, ProductoModel producto) {
+    return email == "admin@admin.com" ? _crearAdminItem(context, producto) : _crearUserItem(context, producto);
+  }
+
+  Widget _crearAdminItem(BuildContext context, ProductoModel producto) {
+    return Dismissible(
+      key: UniqueKey(),
+      background: Container(color: Colors.red),
+      onDismissed: (direction) {
+        productosProvider.borrarProducto(producto.id!);
+      },
+      child: Card(
+        color: Colors.white.withOpacity(0.8),
+        child: Column(
+          children: [
+            (producto.fotoUrl == null)
+                ? const Image(image: AssetImage("images/assets/image.jpg"))
+                : Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: FadeInImage(
+                        image: NetworkImage(producto.fotoUrl!),
+                        placeholder: const AssetImage("images/assets/fondoPreview.gif"),
+                        height: 300.0,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+            ListTile(
+              title: Text("${producto.titulo} - \$${producto.valor.toStringAsFixed(2)}"),
+              subtitle: Text("${producto.id}"),
+              onTap: () async {
+                Navigator.pushNamed(context, "/producto", arguments: producto);
+                setState(() {});
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _crearUserItem(BuildContext context, ProductoModel producto) {
     return Card(
       color: Colors.white.withOpacity(0.8),
       child: Column(
         children: [
           (producto.fotoUrl == null)
-              ? const Image(image: AssetImage("images/users/chikil.jpg"))
+              ? const Image(image: AssetImage("images/assets/image.jpg"))
               : Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
@@ -91,11 +138,7 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
             title: Text("${producto.titulo} - \$${producto.valor.toStringAsFixed(2)}"),
             subtitle: Text("${producto.id}"),
             onTap: () async {
-              if (email == "admin@admin.com") {
-                Navigator.pushNamed(context, "/producto", arguments: producto);
-              } else {
-                Navigator.pushNamed(context, "/VerProducto", arguments: producto);
-              }
+              Navigator.pushNamed(context, "/VerProducto", arguments: producto);
               setState(() {});
             },
           ),
@@ -118,17 +161,11 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
         onPressed: () => Navigator.pushNamed(context, "/producto"),
       );
     } else {
-      if (1 == 1) {
-        //debe salir carrito carrito 
-        return FloatingActionButton(
-          child: Icon(Icons.shopping_cart_sharp),
-          backgroundColor: Colors.deepPurpleAccent,
-          onPressed: () => Navigator.pushNamed(context, "/carrito"),
-        );
-      } else {
-        // no debe salir carrito
-        return Container();
-      }
+      return FloatingActionButton(
+        child: Icon(Icons.shopping_cart_sharp),
+        backgroundColor: Colors.deepPurpleAccent,
+        onPressed: () => Navigator.pushNamed(context, "/carrito"),
+      );
     }
   }
 }
