@@ -9,7 +9,6 @@ import 'package:http_parser/http_parser.dart';
 
 class ProductosProvider{
 
-  //final String _url = "https://flutter-varios-3c06b-default-rtdb.firebaseio.com"; // Manuel
   final String _url = "https://flutter-varios-df7a9-default-rtdb.firebaseio.com";
   final _prefs = PreferenciasUsuario();
 
@@ -20,8 +19,6 @@ class ProductosProvider{
     final resp = await http.post(Uri.parse(url), body: productoModelToJson(producto));
 
     final decodedData = json.decode(resp.body);
-
-    //print (decodedData);
 
     return true;
     }catch(error){
@@ -37,8 +34,6 @@ class ProductosProvider{
     final resp = await http.put(Uri.parse(url), body: productoModelToJson(producto));
 
     final decodedData = json.decode(resp.body);
-
-    //print (decodedData);
 
     return true;
     }catch(error){

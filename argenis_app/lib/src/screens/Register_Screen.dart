@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:argenis_app/src/bloc/loggin_bloc.dart';
 import 'package:argenis_app/src/bloc/provider.dart';
+import 'package:argenis_app/src/models/usuario_model.dart';
 import 'package:argenis_app/src/providers/usuario_provider.dart';
 import 'package:argenis_app/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -13,14 +17,17 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  late TextEditingController userNameController;
+  late TextEditingController primerNombreController;
+  late TextEditingController apellidoController;
   late TextEditingController passwordController;
   late TextEditingController emailController;
   late TextEditingController numberController;
 
   final usuarioProvider = UsuarioProvider();
+  File? foto;
 
-  late FocusNode userNameFocus;
+  late FocusNode primerNombreFocus;
+  late FocusNode apellidoFocus;
   late FocusNode passwordFocus;
   late FocusNode emailFocus;
   late FocusNode numberFocus;
@@ -32,14 +39,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Registro de cuenta', style: TextStyle(color: Colors.white),),
-        backgroundColor: Color.fromARGB(255, 124, 74, 31),
+        backgroundColor: const Color.fromARGB(255, 124, 74, 31),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.photo_size_select_actual, color: Colors.white,),
+            onPressed: _seleccionarFoto,
+          ),
+          IconButton(
+            icon: const Icon(Icons.camera_alt,color: Colors.white,),
+            onPressed: _tomarFoto,
+          ),
+        ],
       ),
       body: _loginForm(context),
     );
   }
 
   Widget _loginForm(BuildContext context) {
-    final bloc = Provider.of(context); // Asegúrate de obtener el LoginBloc
+    final bloc = Provider.of(context);
     final size = MediaQuery.of(context).size;
 
     return SingleChildScrollView(
@@ -70,7 +87,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               children: [
                 const Text("Crear cuenta", style: TextStyle(fontSize: 20.0)),
                 const SizedBox(height: 60.0),
-                _crearEmail(bloc!),
+                _mostrarFoto(),
+                const SizedBox(height: 30.0),
+                _crearPrimerNombre(bloc!),
+                const SizedBox(height: 30.0),
+                _crearApellido(bloc),
+                const SizedBox(height: 30.0),
+                _crearEmail(bloc),
                 const SizedBox(height: 30.0),
                 _crearPassword(bloc),
                 const SizedBox(height: 30.0),
@@ -88,6 +111,56 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+  Widget _crearPrimerNombre(LoginBloc bloc) {
+    return StreamBuilder<String>(
+      stream: bloc.primerNombreStream,
+      builder: (context, snapshot) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: TextField(
+            controller: primerNombreController,
+            decoration: InputDecoration(
+              icon: const Icon(Icons.person, color: Colors.deepPurple),
+              hintText: "",
+              labelText: "Primer Nombre",
+              counterText: snapshot.data,
+              errorText: snapshot.error as String?,
+            ),
+            onChanged: bloc.changePrimerNombre,
+            focusNode: primerNombreFocus,
+            onEditingComplete: () => requestFocus(context, apellidoFocus),
+          ),
+        );
+      },
+    );
+  }
+
+
+
+  Widget _crearApellido(LoginBloc bloc) {
+    return StreamBuilder<String>(
+      stream: bloc.apellidoStream,
+      builder: (context, snapshot) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: TextField(
+            controller: apellidoController,
+            decoration: InputDecoration(
+              icon: const Icon(Icons.person, color: Colors.deepPurple),
+              hintText: "",
+              labelText: "Apellido",
+              counterText: snapshot.data,
+              errorText: snapshot.error as String?,
+            ),
+            onChanged: bloc.changeApellido,
+            focusNode: apellidoFocus,
+            onEditingComplete: () => requestFocus(context, emailFocus),
+          ),
+        );
+      },
+    );
+  }
+
   Widget _crearEmail(LoginBloc bloc) {
     return StreamBuilder<String>(
       stream: bloc.emailStream,
@@ -98,7 +171,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             controller: emailController,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              icon: const Icon(Icons.alternate_email, color: Color.fromARGB(255, 122, 64, 24)),
+              icon: const Icon(Icons.alternate_email, color: Colors.deepPurple),
               hintText: "ejemplo@correo.com",
               labelText: "Correo electrónico",
               counterText: snapshot.data,
@@ -123,7 +196,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             controller: passwordController,
             obscureText: true,
             decoration: InputDecoration(
-              icon: const Icon(Icons.lock_outline, color: Color.fromARGB(255, 122, 64, 24)),
+              icon: const Icon(Icons.lock_outline, color: Colors.deepPurple),
               labelText: "Contraseña",
               counterText: snapshot.data,
               errorText: snapshot.error as String?,
@@ -142,7 +215,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       builder: (context, snapshot) {
         return ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color.fromARGB(255, 122, 64, 24),
+            backgroundColor: Colors.deepPurple,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5.0),
             ),
@@ -162,27 +235,79 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _register(LoginBloc bloc, BuildContext context) async {
 
     Map info = await usuarioProvider.nuevoUsuario(bloc.email, bloc.password);
+    UsuarioModel user = UsuarioModel(
+      primerNombre: bloc.primerNombre,
+      apellido: bloc.apellido,
+      email: bloc.email,
+      password: bloc.password,
+      fotoUrl: bloc.fotoUrl
+    );
+    var userCreado = await usuarioProvider.crearUsuario(user);
 
-    if( info["ok"]){
+    if( info["ok"] && userCreado){
       // ignore: use_build_context_synchronously
-      Navigator.pushReplacementNamed(context, "/homeDomicilio");
+      Navigator.pushReplacementNamed(context, "/homeDomicilio", arguments: bloc);
     }else{
       // ignore: use_build_context_synchronously
       mostrarAlerta(context, info["mensaje"]);
     }
   }
 
+    Widget _mostrarFoto() {
+      final bloc = Provider.of(context);
+      //String? fot = bloc?.fotoUrl;
+    if (bloc?.fotoUrl != null) {
+      return FadeInImage(
+        image: NetworkImage(bloc!.fotoUrl),
+        placeholder: const AssetImage("images/assets/fondoPreview.gif"),
+        height: 300.0,
+        fit: BoxFit.contain,
+      );
+    } else {
+      if (foto != null) {
+        return Image.file(
+          foto!,
+          fit: BoxFit.cover,
+          height: 300.0,
+        );
+      }
+      return Image.asset('images/assets/image.jpg');
+    }
+  }
+
+  void _seleccionarFoto() async {
+    _procesarImagen(ImageSource.gallery);
+  }
+
+  void _tomarFoto() async {
+    _procesarImagen(ImageSource.camera);
+  }
+
+  void _procesarImagen(ImageSource origen) async {
+    final bloc = Provider.of(context);
+    String? fot = bloc?.fotoUrl;
+
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: origen);
+
+    if (pickedFile != null) {
+      foto = File(pickedFile.path);
+      fot = null;
+      setState(() {});
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-
-    userNameController = TextEditingController();
+    primerNombreController = TextEditingController();
+    apellidoController = TextEditingController();
     passwordController = TextEditingController();
     emailController = TextEditingController();
     numberController = TextEditingController();
 
-    userNameFocus = FocusNode();
+    primerNombreFocus = FocusNode();
+    apellidoFocus = FocusNode();
     passwordFocus = FocusNode();
     emailFocus = FocusNode();
     numberFocus = FocusNode();
@@ -190,12 +315,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void dispose() {
-    userNameController.dispose();
+    primerNombreController.dispose();
+    apellidoController.dispose();
     passwordController.dispose();
     emailController.dispose();
     numberController.dispose();
 
-    userNameFocus.dispose();
+    primerNombreFocus.dispose();
+    apellidoFocus.dispose();
     passwordFocus.dispose();
     emailFocus.dispose();
     numberFocus.dispose();

@@ -24,7 +24,7 @@ class ProductoModel {
         this.descripcion
     });
 
-    factory ProductoModel.fromJson(Map<String, dynamic> json) => new ProductoModel(
+    factory ProductoModel.fromJson(Map<String, dynamic> json) => ProductoModel(
         id         : json["id"],
         titulo     : json["titulo"],
         valor      : json["valor"],
