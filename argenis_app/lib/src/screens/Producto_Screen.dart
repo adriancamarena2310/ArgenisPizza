@@ -35,7 +35,7 @@ class _ProductoPageState extends State<ProductoPage> {
       key: scaffoldKey,
       appBar: AppBar(
         title: const Text("Producto", style: TextStyle(color: Colors.white),),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Color.fromARGB(255, 122, 64, 24),
         actions: [
           IconButton(
             icon: const Icon(Icons.photo_size_select_actual, color: Colors.white,),
@@ -57,7 +57,8 @@ class _ProductoPageState extends State<ProductoPage> {
                 _mostrarFoto(),
                 _crearNombre(),
                 _crearPrecio(),
-                _crearDisponible(),
+                _crearDescrpcion(),
+                const SizedBox(height: 20),
                 _crearBoton(),
               ],
             ),
@@ -84,6 +85,23 @@ class _ProductoPageState extends State<ProductoPage> {
     );
   }
 
+  Widget _crearDescrpcion() {
+    return TextFormField(
+      initialValue: producto.descripcion,
+      textCapitalization: TextCapitalization.sentences,
+      decoration: const InputDecoration(
+        labelText: "Descripcion"
+      ),
+      onSaved: (value) => producto.descripcion = value!,
+      validator: (value) {
+        if (value!.length < 3) {
+          return "Ingrese una descripcion";
+        }
+        return null;
+      },
+    );
+  }
+
   Widget _crearPrecio() {
     return TextFormField(
       initialValue: producto.valor.toString(),
@@ -99,17 +117,6 @@ class _ProductoPageState extends State<ProductoPage> {
           return "Sólo escriba números";
         }
       },
-    );
-  }
-
-  Widget _crearDisponible() {
-    return SwitchListTile(
-      value: producto.disponible,
-      title: const Text("Disponible"),
-      activeColor: Colors.deepPurple,
-      onChanged: (value) => setState(() {
-        producto.disponible = value;
-      }),
     );
   }
 
@@ -175,7 +182,7 @@ class _ProductoPageState extends State<ProductoPage> {
           height: 300.0,
         );
       }
-      return Image.asset('images/pizzas/argeniss.jpg');
+      return Image.asset('images/users/chikil.jpg');
     }
   }
 

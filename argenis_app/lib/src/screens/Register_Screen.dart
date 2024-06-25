@@ -3,6 +3,7 @@ import 'package:argenis_app/src/bloc/provider.dart';
 import 'package:argenis_app/src/providers/usuario_provider.dart';
 import 'package:argenis_app/src/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -30,8 +31,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Registro de cuenta'),
-        backgroundColor: Colors.deepOrange,
+        title: const Text('Registro de cuenta', style: TextStyle(color: Colors.white),),
+        backgroundColor: Color.fromARGB(255, 124, 74, 31),
       ),
       body: _loginForm(context),
     );
@@ -97,7 +98,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             controller: emailController,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              icon: const Icon(Icons.alternate_email, color: Colors.deepPurple),
+              icon: const Icon(Icons.alternate_email, color: Color.fromARGB(255, 122, 64, 24)),
               hintText: "ejemplo@correo.com",
               labelText: "Correo electrónico",
               counterText: snapshot.data,
@@ -122,7 +123,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             controller: passwordController,
             obscureText: true,
             decoration: InputDecoration(
-              icon: const Icon(Icons.lock_outline, color: Colors.deepPurple),
+              icon: const Icon(Icons.lock_outline, color: Color.fromARGB(255, 122, 64, 24)),
               labelText: "Contraseña",
               counterText: snapshot.data,
               errorText: snapshot.error as String?,
@@ -141,7 +142,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       builder: (context, snapshot) {
         return ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.deepPurple,
+            backgroundColor: Color.fromARGB(255, 122, 64, 24),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5.0),
             ),

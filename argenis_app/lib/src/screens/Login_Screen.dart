@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inicio de Sesión'),
+        title: const Text('Inicio de Sesión', style: TextStyle(color: Colors.white),),
         backgroundColor: Color.fromARGB(255, 124, 74, 31),
       ),
       body: _loginForm(context),
@@ -163,7 +163,7 @@ Widget _loginForm(BuildContext context) {
 
     if( info["ok"]){
       // ignore: use_build_context_synchronously
-      Navigator.pushReplacementNamed(context, "/homeDomicilio");
+      Navigator.pushReplacementNamed(context, "/homeDomicilio",arguments: bloc.email);
     }else{
       // ignore: use_build_context_synchronously
       mostrarAlerta(context, info["mensaje"]);

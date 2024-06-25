@@ -14,19 +14,27 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
 
   final _scaffkey = GlobalKey<ScaffoldState>();
    final productosProvider = ProductosProvider();
+    String email = "";
 
   double total = 0.0;
   List<int> quantities = List<int>.filled(5, 0);
 
   @override
   Widget build(BuildContext context) {
+
+      final String? emailData = ModalRoute.of(context)?.settings.arguments as String?;
+    if (emailData != null) {
+      email = emailData;
+    }
+
     return Scaffold(
       key: _scaffkey,
       appBar: AppBar(
-        title: const Text("Argenis"),
-        backgroundColor: Colors.deepOrange,
+        title: const Text("Coffee Guillrmos", style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 122, 64, 24),
       ),
       body: _crearListado(),
+      floatingActionButton: _floatingButton(context),
       //drawer: GetDrawer.getDrawer(context),
     );
   }
@@ -49,7 +57,9 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
   }
 
   Widget _crearItem(BuildContext context, ProductoModel producto){
-    return Dismissible(
+
+    if (email == "admin@admin.com") {
+      return Dismissible(
       key: UniqueKey(),
       background: Container(
         color: Colors.red,
@@ -69,7 +79,7 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
               width: double.infinity,
               fit: BoxFit.cover,
             ),
-             ListTile(
+            ListTile(
         title: Text("${producto.titulo}  -  ${producto.valor}"),
         subtitle: Text("${producto.id}"),
         onTap: () async {
@@ -81,6 +91,35 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
         ),
       )
     );
+    } else {
+      return Card(
+        child: Column(
+          children: [
+            (producto.fotoUrl == null)
+                ? const Image(image: AssetImage("images/users/chikil.jpg"))
+                : FadeInImage(
+                    image: NetworkImage(producto.fotoUrl!),
+                    placeholder: const AssetImage("images/assets/fondoPreview.gif"),
+                    height: 300.0,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+            ListTile(
+              title: Text("${producto.titulo} - ${producto.valor}"),
+              subtitle: Text("${producto.id}"),
+              onTap: () async {
+                if (email == "admin@admin.com") {
+                  Navigator.pushNamed(context, "/producto", arguments: producto);
+                } else {
+                  Navigator.pushNamed(context, "/VerProducto", arguments: producto);
+                }
+                setState(() {});
+              },
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   @override
@@ -88,7 +127,31 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
     super.initState();
     total = 0;
   }
+
+  
+Widget _floatingButton(BuildContext context) {
+    if (email == "admin@admin.com") {
+      return FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: Colors.deepPurpleAccent,
+        onPressed: () => Navigator.pushNamed(context, "/producto"),
+      );
+    } else {
+      if(1 == 1){//debe salir carrito carrito 
+      return FloatingActionButton(
+        child: Icon(Icons.shopping_cart_sharp),
+        backgroundColor: Colors.deepPurpleAccent,
+        onPressed: () => Navigator.pushNamed(context, "/carrito"),
+      );
+      }else{// no debe salir carrito
+        return Container(); 
+      }
+    }
+  }
 }
+
+
+
 
 /*
 Container(
