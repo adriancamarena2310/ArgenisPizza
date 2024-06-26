@@ -1,7 +1,9 @@
 import 'package:argenis_app/src/models/usuario_model.dart';
+import 'package:argenis_app/src/screens/NavBar.dart';
 import 'package:flutter/material.dart';
 import 'package:argenis_app/src/models/producto_model.dart';
 import 'package:argenis_app/src/providers/productos_provider.dart';
+
 
 class HomeDomicilioScreen extends StatefulWidget {
   const HomeDomicilioScreen({super.key});
@@ -44,7 +46,7 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
         ],
       ),
       floatingActionButton: _floatingButton(context),
-      //drawer: GetDrawer.getDrawer(context),
+      drawer: NavBar(),  // Añade NavBar como drawer
     );
   }
 

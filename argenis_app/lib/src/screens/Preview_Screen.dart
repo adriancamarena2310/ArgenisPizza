@@ -41,7 +41,7 @@ class PreviewScreen extends StatelessWidget {
   }
 
 
-     void _entrarHomeTienda(BuildContext context) async {
+    void _entrarHomeTienda(BuildContext context) async {
     
     Map info = await usuarioProvider.login("test@test.com", "1234567");
 

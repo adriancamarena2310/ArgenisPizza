@@ -158,19 +158,12 @@ Widget _loginForm(BuildContext context) {
     );
   }
 
-   void _login(LoginBloc bloc, BuildContext context) async {
+  void _login(LoginBloc bloc, BuildContext context) async {
     
     Map info = await usuarioProvider.login(bloc.email, bloc.password);
-
+    var user = await usuarioProvider.buscarUsuarioPorEmail(bloc.email);
     if( info["ok"]){
-
-      UsuarioModel user = UsuarioModel(
-      primerNombre: "",
-      apellido: "",
-      email: bloc.email,
-      password: bloc.password,
-      fotoUrl: ""
-    );
+      print(user);
       // ignore: use_build_context_synchronously
       Navigator.pushReplacementNamed(context, "/homeDomicilio",arguments: user);
     }else{
