@@ -1,15 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:argenis_app/src/models/producto_model.dart';
 
 class VerProductoScreen extends StatefulWidget {
-  const VerProductoScreen({super.key});
+  const VerProductoScreen({Key? key}) : super(key: key);
 
   @override
-  State<VerProductoScreen> createState() => _VerProductoScreenState();
+  _VerProductoScreenState createState() => _VerProductoScreenState();
 }
 
 class _VerProductoScreenState extends State<VerProductoScreen> {
   ProductoModel producto = ProductoModel();
+  int _cantidad = 0;
+  bool _favorito = false; // Estado del botón de favorito
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFavoritoState();
+  }
+
+  void _incrementarCantidad() {
+    setState(() {
+      if (_cantidad < 20) _cantidad++;
+    });
+  }
+
+  void _reducirCantidad() {
+    setState(() {
+      if (_cantidad > 0) _cantidad--;
+    });
+  }
+
+  void _toggleFavorito() {
+    setState(() {
+      _favorito = !_favorito;
+      _saveFavoritoState(_favorito);
+    });
+  }
+
+  void _loadFavoritoState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _favorito = prefs.getBool('favorito_${producto.id}') ?? false;
+    });
+  }
+
+  void _saveFavoritoState(bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('favorito_${producto.id}', value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +61,15 @@ class _VerProductoScreenState extends State<VerProductoScreen> {
       appBar: AppBar(
         title: Text(producto.titulo, style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromARGB(255, 122, 64, 24),
+        actions: [
+          IconButton(
+            icon: Icon(
+              _favorito ? Icons.star : Icons.star_border,
+              color: _favorito ? Colors.amber : Colors.grey[400],
+            ),
+            onPressed: _toggleFavorito,
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -68,6 +117,50 @@ class _VerProductoScreenState extends State<VerProductoScreen> {
                     color: Colors.white,
                     backgroundColor: Colors.black.withOpacity(0.5),
                   ),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    // Acción para agregar el producto
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(100, 50),
+                  ),
+                  child: Text(
+                    'Agregar',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(164, 225, 108, 5),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _reducirCantidad,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(40, 40),
+                      ),
+                      child: Text('-', style: TextStyle(fontSize: 30, color: Color.fromARGB(164, 225, 108, 5))),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Text(
+                        '$_cantidad',
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color.fromARGB(164, 225, 108, 5)),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: _incrementarCantidad,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(40, 40),
+                      ),
+                      child: Text('+', style: TextStyle(fontSize: 30, color: Color.fromARGB(164, 225, 108, 5))),
+                    ),
+                  ],
                 ),
               ],
             ),
