@@ -6,8 +6,9 @@ import 'package:argenis_app/src/models/usuario_model.dart';
 import 'package:argenis_app/src/providers/usuario_provider.dart';
 import 'package:argenis_app/src/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -25,6 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final usuarioProvider = UsuarioProvider();
   File? foto;
+  String? fotoUrl2; // URL de la foto seleccionada
 
   late FocusNode primerNombreFocus;
   late FocusNode apellidoFocus;
@@ -38,15 +40,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Registro de cuenta', style: TextStyle(color: Colors.white),),
+        title: const Text('Registro de cuenta', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color.fromARGB(255, 124, 74, 31),
         actions: [
           IconButton(
-            icon: const Icon(Icons.photo_size_select_actual, color: Colors.white,),
+            icon: const Icon(Icons.photo_size_select_actual, color: Colors.white),
             onPressed: _seleccionarFoto,
           ),
           IconButton(
-            icon: const Icon(Icons.camera_alt,color: Colors.white,),
+            icon: const Icon(Icons.camera_alt, color: Colors.white),
             onPressed: _tomarFoto,
           ),
         ],
@@ -83,27 +85,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ],
             ),
-            child: Column(
-              children: [
-                const Text("Crear cuenta", style: TextStyle(fontSize: 20.0)),
-                const SizedBox(height: 60.0),
-                _mostrarFoto(),
-                const SizedBox(height: 30.0),
-                _crearPrimerNombre(bloc!),
-                const SizedBox(height: 30.0),
-                _crearApellido(bloc),
-                const SizedBox(height: 30.0),
-                _crearEmail(bloc),
-                const SizedBox(height: 30.0),
-                _crearPassword(bloc),
-                const SizedBox(height: 30.0),
-                _crearBoton(bloc),
-              ],
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  const Text("Crear cuenta", style: TextStyle(fontSize: 20.0)),
+                  const SizedBox(height: 60.0),
+                  _mostrarFoto(),
+                  const SizedBox(height: 30.0),
+                  _crearPrimerNombre(bloc!),
+                  const SizedBox(height: 30.0),
+                  _crearApellido(bloc),
+                  const SizedBox(height: 30.0),
+                  _crearEmail(bloc),
+                  const SizedBox(height: 30.0),
+                  _crearPassword(bloc),
+                  const SizedBox(height: 30.0),
+                  _crearBoton(bloc),
+                ],
+              ),
             ),
           ),
-          TextButton(   
-           child: const Text("¿Ya tienes cuenta? Login"),
-           onPressed: () => Navigator.pushReplacementNamed(context, "/login"),
+          TextButton(
+            child: const Text("¿Ya tienes cuenta? Login"),
+            onPressed: () => Navigator.pushReplacementNamed(context, "/login"),
           ),
           const SizedBox(height: 100.0),
         ],
@@ -117,7 +122,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       builder: (context, snapshot) {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: TextField(
+          child: TextFormField(
             controller: primerNombreController,
             decoration: InputDecoration(
               icon: const Icon(Icons.person, color: Colors.deepPurple),
@@ -126,6 +131,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               counterText: snapshot.data,
               errorText: snapshot.error as String?,
             ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Por favor ingrese su primer nombre';
+              }
+              return null;
+            },
             onChanged: bloc.changePrimerNombre,
             focusNode: primerNombreFocus,
             onEditingComplete: () => requestFocus(context, apellidoFocus),
@@ -135,15 +146,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-
-
   Widget _crearApellido(LoginBloc bloc) {
     return StreamBuilder<String>(
       stream: bloc.apellidoStream,
       builder: (context, snapshot) {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: TextField(
+          child: TextFormField(
             controller: apellidoController,
             decoration: InputDecoration(
               icon: const Icon(Icons.person, color: Colors.deepPurple),
@@ -152,6 +161,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               counterText: snapshot.data,
               errorText: snapshot.error as String?,
             ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Por favor ingrese su apellido';
+              }
+              return null;
+            },
             onChanged: bloc.changeApellido,
             focusNode: apellidoFocus,
             onEditingComplete: () => requestFocus(context, emailFocus),
@@ -188,7 +203,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _crearPassword(LoginBloc bloc) {
     return StreamBuilder<String>(
-      stream: bloc.paswordStream,
+      stream: bloc.passwordStream,
       builder: (context, snapshot) {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -222,10 +237,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
             elevation: 0.0,
             textStyle: const TextStyle(color: Colors.white),
           ),
-          onPressed: snapshot.hasData ? () => _register(bloc, context) : null,
+          onPressed: () {
+            // Validar formulario antes de proceder
+            if (formKey.currentState?.validate() ?? false) {
+              _register(bloc, context);
+            } else {
+              // Mostrar mensaje de validación no pasada si necesario
+              print("Formulario no válido");
+            }
+          },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-            child: const Text("Ingresar", style: TextStyle(color: Colors.white),),
+            child: const Text("Ingresar", style: TextStyle(color: Colors.white)),
           ),
         );
       },
@@ -233,46 +256,74 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _register(LoginBloc bloc, BuildContext context) async {
+    if (formKey.currentState == null || !formKey.currentState!.validate()) {
+      print("Formulario no válido");
+      return;
+    }
+    print("============================================");
+    print(bloc.email);
+    print(bloc.primerNombre);
+    print(bloc.apellido);
+    print(bloc.fotoUrl);
+    print(bloc.password);
+    print("============================================");
 
+    // Obtener la URL de la foto, usando una cadena vacía si es null
+    String fotoUrl = bloc.fotoUrl.isNotEmpty ? bloc.fotoUrl : '';
+
+    // Realizar el registro
     Map info = await usuarioProvider.nuevoUsuario(bloc.email, bloc.password);
+    print("Información del usuario: $info");
+
     UsuarioModel user = UsuarioModel(
       primerNombre: bloc.primerNombre,
       apellido: bloc.apellido,
       email: bloc.email,
       password: bloc.password,
-      fotoUrl: bloc.fotoUrl
+      fotoUrl: fotoUrl2
     );
-    var userCreado = await usuarioProvider.crearUsuario(user);
 
-    if( info["ok"] && userCreado){
-      // ignore: use_build_context_synchronously
-      Navigator.pushReplacementNamed(context, "/homeDomicilio", arguments: bloc);
-    }else{
-      // ignore: use_build_context_synchronously
+    var userCreado = await usuarioProvider.crearUsuario(user);
+    print("Usuario creado: $userCreado");
+
+    if (info["ok"] && userCreado) {
+      // Asegúrate de que estás pasando el argumento correcto aquí
+      Navigator.pushReplacementNamed(context, "/homeDomicilio", arguments: user);
+    } else {
       mostrarAlerta(context, info["mensaje"]);
     }
   }
 
-    Widget _mostrarFoto() {
-      final bloc = Provider.of(context);
-      //String? fot = bloc?.fotoUrl;
-    if (bloc?.fotoUrl != null) {
-      return FadeInImage(
-        image: NetworkImage(bloc!.fotoUrl),
-        placeholder: const AssetImage("images/assets/fondoPreview.gif"),
-        height: 300.0,
-        fit: BoxFit.contain,
-      );
-    } else {
-      if (foto != null) {
-        return Image.file(
-          foto!,
-          fit: BoxFit.cover,
-          height: 300.0,
-        );
-      }
-      return Image.asset('images/assets/image.jpg');
-    }
+  Widget _mostrarFoto() {
+    final bloc = Provider.of(context);
+
+    return StreamBuilder<String>(
+      stream: bloc?.fotoUrlStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData && snapshot.data != null && snapshot.data!.isNotEmpty) {
+          return FadeInImage(
+            image: NetworkImage(snapshot.data!),
+            placeholder: const AssetImage("images/assets/fondoPreview.gif"),
+            height: 300.0,
+            fit: BoxFit.contain,
+          );
+        } else {
+          if (foto != null) {
+            return Image.file(
+              foto!,
+              fit: BoxFit.cover,
+              height: 300.0,
+            );
+          }
+          // Placeholder image or default image when no fotoUrl or foto is available
+          return Image.asset(
+            'images/assets/image.jpg',
+            fit: BoxFit.cover,
+            height: 300.0,
+          );
+        }
+      },
+    );
   }
 
   void _seleccionarFoto() async {
@@ -284,17 +335,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _procesarImagen(ImageSource origen) async {
-    final bloc = Provider.of(context);
-    String? fot = bloc?.fotoUrl;
-
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: origen);
-
-    if (pickedFile != null) {
+  final bloc = Provider.of(context); // Obtener el bloc desde el Provider
+  final picker = ImagePicker();
+  final pickedFile = await picker.pickImage(source: origen);
+  fotoUrl2 = pickedFile!.path;
+  print(pickedFile!.path);
+  bloc?.changeFotoUrl(pickedFile!.path); 
+  if (pickedFile != null) {
+    setState(() {
       foto = File(pickedFile.path);
-      fot = null;
-      setState(() {});
-    }
+      // Actualizar el bloc con la URL de la imagen
+    });
+  }
+}
+
+
+
+  Future<String> _guardarImagenEnDirectorioTemporal(String fileName, File imagen) async {
+    Directory directorioTemporal = await getTemporaryDirectory();
+    String rutaTemporal = path.join(directorioTemporal.path, fileName);
+    await imagen.copy(rutaTemporal);
+    return rutaTemporal;
   }
 
   @override

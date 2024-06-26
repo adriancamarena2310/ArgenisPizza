@@ -8,36 +8,34 @@ class LoginBloc with Validators {
   final _primerNombreController = BehaviorSubject<String>();
   final _apellidoController = BehaviorSubject<String>();
   final _fotoUrlController = BehaviorSubject<String>();
-  
 
-  // Recuperar los datos del Stream
+  // Streams públicos para consumir los datos
   Stream<String> get emailStream => _emailController.stream.transform(validarEmail);
-  Stream<String> get paswordStream => _passwordController.stream.transform(validarPassword);
-  Stream<String> get primerNombreStream => _passwordController;
-  Stream<String> get apellidoStream => _emailController.stream;
-  Stream<String> get fotoUrlStream => _passwordController.stream;
+  Stream<String> get passwordStream => _passwordController.stream.transform(validarPassword);
+  Stream<String> get primerNombreStream => _primerNombreController.stream;
+  Stream<String> get apellidoStream => _apellidoController.stream;
+  Stream<String> get fotoUrlStream => _fotoUrlController.stream;
 
-  // Combina los flujos de email y contraseña para determinar si el formulario es válido
+  // Combinar streams para validar el formulario
   Stream<bool> get formValidStream =>
-      Rx.combineLatest2(emailStream, paswordStream, (e, p) => true);
+      Rx.combineLatest2(emailStream, passwordStream, (e, p) => true);
 
-  // Insertar valores al Stream
+  // Métodos para cambiar los valores de los streams
   Function(String) get changeEmail => _emailController.sink.add;
   Function(String) get changePassword => _passwordController.sink.add;
   Function(String) get changePrimerNombre => _primerNombreController.sink.add;
   Function(String) get changeApellido => _apellidoController.sink.add;
   Function(String) get changeFotoUrl => _fotoUrlController.sink.add;
 
-  //Obtener el ultimo valos ingresado a los streams
-  String get email => _emailController.value;
-  String get password => _passwordController.value;
-  String get primerNombre => _primerNombreController.value;
-  String get apellido => _apellidoController.value;
-  String get fotoUrl => _fotoUrlController.value;
-
+  // Obtener el último valor ingresado a los streams
+  String get email => _emailController.valueOrNull ?? '';
+  String get password => _passwordController.valueOrNull ?? '';
+  String get primerNombre => _primerNombreController.valueOrNull ?? '';
+  String get apellido => _apellidoController.valueOrNull ?? '';
+  String get fotoUrl => _fotoUrlController.valueOrNull ?? '';
 
   // Limpiar los controladores al cerrar el bloc
-  dispose() {
+  void dispose() {
     _emailController.close();
     _passwordController.close();
     _primerNombreController.close();

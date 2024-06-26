@@ -1,3 +1,4 @@
+import 'package:argenis_app/src/models/usuario_model.dart';
 import 'package:flutter/material.dart';
 import 'package:argenis_app/src/models/producto_model.dart';
 import 'package:argenis_app/src/providers/productos_provider.dart';
@@ -12,15 +13,15 @@ class HomeDomicilioScreen extends StatefulWidget {
 class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
   final _scaffkey = GlobalKey<ScaffoldState>();
   final productosProvider = ProductosProvider();
-  String email = "";
+  UsuarioModel usser = UsuarioModel();
   double total = 0.0;
   List<int> quantities = List<int>.filled(5, 0);
 
   @override
   Widget build(BuildContext context) {
-    final String? emailData = ModalRoute.of(context)?.settings.arguments as String?;
-    if (emailData != null) {
-      email = emailData;
+    final UsuarioModel user = ModalRoute.of(context)!.settings.arguments as UsuarioModel;
+    if (user != null) {
+      usser = user;
     }
 
     return Scaffold(
@@ -65,7 +66,7 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
   }
 
   Widget _crearItem(BuildContext context, ProductoModel producto) {
-    return email == "admin@admin.com" ? _crearAdminItem(context, producto) : _crearUserItem(context, producto);
+    return usser.email == "admin@admin.com" ? _crearAdminItem(context, producto) : _crearUserItem(context, producto);
   }
 
   Widget _crearAdminItem(BuildContext context, ProductoModel producto) {
@@ -154,7 +155,7 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
   }
 
   Widget _floatingButton(BuildContext context) {
-    if (email == "admin@admin.com") {
+    if (usser.email == "admin@admin.com") {
       return FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: Colors.deepPurpleAccent,

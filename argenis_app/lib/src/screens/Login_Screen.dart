@@ -1,5 +1,6 @@
 import 'package:argenis_app/src/bloc/loggin_bloc.dart';
 import 'package:argenis_app/src/bloc/provider.dart';
+import 'package:argenis_app/src/models/usuario_model.dart';
 import 'package:argenis_app/src/providers/usuario_provider.dart';
 import 'package:argenis_app/src/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -113,7 +114,7 @@ Widget _loginForm(BuildContext context) {
 
   Widget _crearPassword(LoginBloc bloc) {
     return StreamBuilder<String>(
-      stream: bloc.paswordStream,
+      stream: bloc.passwordStream,
       builder: (context, snapshot) {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -162,8 +163,16 @@ Widget _loginForm(BuildContext context) {
     Map info = await usuarioProvider.login(bloc.email, bloc.password);
 
     if( info["ok"]){
+
+      UsuarioModel user = UsuarioModel(
+      primerNombre: "",
+      apellido: "",
+      email: bloc.email,
+      password: bloc.password,
+      fotoUrl: ""
+    );
       // ignore: use_build_context_synchronously
-      Navigator.pushReplacementNamed(context, "/homeDomicilio",arguments: bloc.email);
+      Navigator.pushReplacementNamed(context, "/homeDomicilio",arguments: user);
     }else{
       // ignore: use_build_context_synchronously
       mostrarAlerta(context, info["mensaje"]);
