@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:argenis_app/src/bloc/validators.dart';
+import 'package:Guillmors_coffe/src/bloc/validators.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LoginBloc with Validators {

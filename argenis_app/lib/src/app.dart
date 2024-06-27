@@ -1,14 +1,14 @@
-import 'package:argenis_app/src/models/usuario_model.dart';
-import 'package:argenis_app/src/screens/Admin_Screen.dart';
-import 'package:argenis_app/src/screens/Carrito_Screen.dart' as carrito_screen;
-import 'package:argenis_app/src/screens/Home_Domicilio_Screen.dart';
-import 'package:argenis_app/src/screens/Home_Tienda_Screen.dart';
-import 'package:argenis_app/src/screens/Login_Screen.dart';
-import 'package:argenis_app/src/screens/Preview_Screen.dart';
-import 'package:argenis_app/src/screens/Producto_Screen.dart';
-import 'package:argenis_app/src/screens/Profile_Screen.dart';
-import 'package:argenis_app/src/screens/Register_Screen.dart';
-import 'package:argenis_app/src/screens/ver_producto.dart';
+import 'package:Guillmors_coffe/src/models/usuario_model.dart';
+import 'package:Guillmors_coffe/src/screens/Admin_Screen.dart';
+import 'package:Guillmors_coffe/src/screens/Home_Domicilio_Screen.dart';
+import 'package:Guillmors_coffe/src/screens/Home_Tienda_Screen.dart';
+import 'package:Guillmors_coffe/src/screens/Login_Screen.dart';
+import 'package:Guillmors_coffe/src/screens/Preview_Screen.dart';
+import 'package:Guillmors_coffe/src/screens/Producto_Screen.dart';
+import 'package:Guillmors_coffe/src/screens/Profile_Screen.dart';
+import 'package:Guillmors_coffe/src/screens/Register_Screen.dart';
+import 'package:Guillmors_coffe/src/screens/Ver_Producto.dart';
+import 'package:Guillmors_coffe/src/screens/Carrito_Screen.dart' as carrito_screen;
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {

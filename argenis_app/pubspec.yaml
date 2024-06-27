@@ -1,21 +1,21 @@
-name: argenis_app
+name: Guillmors_coffe
 description: "A new Flutter project."
 
-publish_to: 'none' 
+publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.2.6 <4.0.0'
+  sdk: ">=3.2.6 <4.0.0"
 
 dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
   http: ^1.2.0
   path_provider: ^2.1.3
   url_launcher: ^6.0.20
-  
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -27,11 +27,14 @@ dev_dependencies:
   shared_preferences: ^2.2.3
   validators: ^3.0.0
 
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/assets/Font.jpg"
+  adaptive_icon_background: "images/assets/Font.jpg"
+
 flutter:
-
-
   uses-material-design: true
-
 
   assets:
     - images/assets/argenis.jpg
@@ -44,4 +47,3 @@ flutter:
     - images/users/ayalax.jpg
     - images/assets/granos.gif
     - images/assets/image.jpg
-

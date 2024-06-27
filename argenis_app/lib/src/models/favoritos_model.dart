@@ -1,6 +1,6 @@
+import 'package:Guillmors_coffe/src/models/producto_model.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:argenis_app/src/models/producto_model.dart';
 
 class FavoritosModelScreen extends StatefulWidget {
   const FavoritosModelScreen({Key? key}) : super(key: key);

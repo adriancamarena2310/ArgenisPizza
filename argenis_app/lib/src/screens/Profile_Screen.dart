@@ -1,7 +1,7 @@
-import 'package:argenis_app/src/providers/productos_provider.dart';
+import 'package:Guillmors_coffe/src/models/usuario_model.dart';
+import 'package:Guillmors_coffe/src/providers/productos_provider.dart';
+import 'package:Guillmors_coffe/src/providers/usuario_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:argenis_app/src/models/usuario_model.dart';
-import 'package:argenis_app/src/providers/usuario_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 

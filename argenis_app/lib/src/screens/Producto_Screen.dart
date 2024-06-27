@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:argenis_app/src/models/producto_model.dart';
+import 'package:Guillmors_coffe/src/models/producto_model.dart';
+import 'package:Guillmors_coffe/src/providers/productos_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:argenis_app/src/providers/productos_provider.dart';
-import 'package:argenis_app/src/utils/utils.dart' as utils;
+import 'package:Guillmors_coffe/src/utils/utils.dart' as utils;
 import 'package:image_picker/image_picker.dart';
 
 class ProductoPage extends StatefulWidget {

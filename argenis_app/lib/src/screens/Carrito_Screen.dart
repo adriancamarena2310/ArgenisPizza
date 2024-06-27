@@ -1,5 +1,5 @@
+import 'package:Guillmors_coffe/src/models/producto_model.dart';
 import 'package:flutter/material.dart';
-import 'package:argenis_app/src/models/producto_model.dart';
 
 class CarritoScreen extends StatelessWidget {
   final List<ProductoModel> productos;

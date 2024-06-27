@@ -1,8 +1,8 @@
-import 'package:argenis_app/src/models/usuario_model.dart';
-import 'package:argenis_app/src/screens/NavBar.dart';
+import 'package:Guillmors_coffe/src/models/producto_model.dart';
+import 'package:Guillmors_coffe/src/models/usuario_model.dart';
+import 'package:Guillmors_coffe/src/providers/productos_provider.dart';
+import 'package:Guillmors_coffe/src/screens/NavBar.dart';
 import 'package:flutter/material.dart';
-import 'package:argenis_app/src/models/producto_model.dart';
-import 'package:argenis_app/src/providers/productos_provider.dart';
 
 class AdminScreen extends StatelessWidget {
   AdminScreen({Key? key}) : super(key: key);

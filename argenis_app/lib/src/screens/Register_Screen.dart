@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:argenis_app/src/bloc/loggin_bloc.dart';
-import 'package:argenis_app/src/bloc/provider.dart';
-import 'package:argenis_app/src/models/usuario_model.dart';
-import 'package:argenis_app/src/providers/productos_provider.dart';
-import 'package:argenis_app/src/providers/usuario_provider.dart';
-import 'package:argenis_app/src/utils/utils.dart';
+import 'package:Guillmors_coffe/src/bloc/loggin_bloc.dart';
+import 'package:Guillmors_coffe/src/bloc/provider.dart';
+import 'package:Guillmors_coffe/src/models/usuario_model.dart';
+import 'package:Guillmors_coffe/src/providers/productos_provider.dart';
+import 'package:Guillmors_coffe/src/providers/usuario_provider.dart';
+import 'package:Guillmors_coffe/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;

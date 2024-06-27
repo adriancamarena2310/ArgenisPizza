@@ -1,8 +1,7 @@
+import 'package:Guillmors_coffe/src/models/producto_model.dart';
+import 'package:Guillmors_coffe/src/providers/productos_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:argenis_app/src/models/producto_model.dart';
-import 'package:argenis_app/src/providers/productos_provider.dart';
-import 'package:argenis_app/src/screens/ver_producto.dart';
-import 'package:argenis_app/src/screens/carrito_screen.dart' as carrito_screen;
+import 'package:Guillmors_coffe/src/screens/carrito_screen.dart' as carrito_screen;
 
 class HomeTiendaScreem extends StatefulWidget {
   const HomeTiendaScreem({Key? key}) : super(key: key);

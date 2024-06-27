@@ -1,4 +1,4 @@
-import 'package:argenis_app/src/bloc/loggin_bloc.dart';
+import 'package:Guillmors_coffe/src/bloc/loggin_bloc.dart';
 import 'package:flutter/material.dart';
 
 class Provider extends InheritedWidget {

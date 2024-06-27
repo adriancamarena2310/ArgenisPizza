@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:argenis_app/src/models/usuario_model.dart';
-import 'package:argenis_app/src/preferencias_usuario/preferencias_usuario.dart';
+import 'package:Guillmors_coffe/src/models/usuario_model.dart';
+import 'package:Guillmors_coffe/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:http/http.dart' as http;
 
 class UsuarioProvider {
