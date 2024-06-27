@@ -23,7 +23,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late TextEditingController apellidoController;
   late TextEditingController passwordController;
   late TextEditingController emailController;
-  late TextEditingController numberController;
 
   final usuarioProvider = UsuarioProvider();
   File? foto;
@@ -34,7 +33,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late FocusNode apellidoFocus;
   late FocusNode passwordFocus;
   late FocusNode emailFocus;
-  late FocusNode numberFocus;
 
   final formKey = GlobalKey<FormState>();
 
@@ -55,6 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ],
       ),
+      backgroundColor: Colors.white, 
       body: _loginForm(context),
     );
   }
@@ -68,7 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         children: [
           SafeArea(
             child: Container(
-              height: 180.0,
+              height: 10.0,
             ),
           ),
           Container(
@@ -127,7 +126,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: TextFormField(
             controller: primerNombreController,
             decoration: InputDecoration(
-              icon: const Icon(Icons.person, color: Colors.deepPurple),
+              icon: const Icon(Icons.person, color: const Color.fromARGB(255, 147, 91, 41)),
               hintText: "",
               labelText: "Primer Nombre",
               counterText: snapshot.data,
@@ -157,7 +156,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: TextFormField(
             controller: apellidoController,
             decoration: InputDecoration(
-              icon: const Icon(Icons.person, color: Colors.deepPurple),
+              icon: const Icon(Icons.person, color: const Color.fromARGB(255, 147, 91, 41)),
               hintText: "",
               labelText: "Apellido",
               counterText: snapshot.data,
@@ -188,7 +187,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             controller: emailController,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              icon: const Icon(Icons.alternate_email, color: Colors.deepPurple),
+              icon: const Icon(Icons.alternate_email, color: const Color.fromARGB(255, 147, 91, 41)),
               hintText: "ejemplo@correo.com",
               labelText: "Correo electrónico",
               counterText: snapshot.data,
@@ -213,7 +212,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             controller: passwordController,
             obscureText: true,
             decoration: InputDecoration(
-              icon: const Icon(Icons.lock_outline, color: Colors.deepPurple),
+              icon: const Icon(Icons.lock_outline, color: const Color.fromARGB(255, 147, 91, 41)),
               labelText: "Contraseña",
               counterText: snapshot.data,
               errorText: snapshot.error as String?,
@@ -232,7 +231,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       builder: (context, snapshot) {
         return ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.deepPurple,
+            backgroundColor: const Color.fromARGB(255, 147, 91, 41),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5.0),
             ),
@@ -279,7 +278,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       apellido: bloc.apellido,
       email: bloc.email,
       password: bloc.password,
-      fotoUrl: fotoUrl2
+      fotoUrl: fotoUrl2,
     );
 
     var userCreado = await usuarioProvider.crearUsuario(user);
@@ -334,26 +333,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _procesarImagen(ImageSource origen) async {
-  final bloc = Provider.of(context); // Obtener el bloc desde el Provider
-  final picker = ImagePicker();
-  final pickedFile = await picker.pickImage(source: origen);
-  fotoUrl2 = pickedFile!.path;
-  bloc?.changeFotoUrl(pickedFile!.path); 
-  if (pickedFile != null) {
-    setState(() {
-      foto = File(pickedFile.path);
-      // Actualizar el bloc con la URL de la imagen
-    });
-  }
-}
+    final bloc = Provider.of(context); // Obtener el bloc desde el Provider
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: origen);
 
-
-
-  Future<String> _guardarImagenEnDirectorioTemporal(String fileName, File imagen) async {
-    Directory directorioTemporal = await getTemporaryDirectory();
-    String rutaTemporal = path.join(directorioTemporal.path, fileName);
-    await imagen.copy(rutaTemporal);
-    return rutaTemporal;
+    if (pickedFile != null) {
+      setState(() {
+        foto = File(pickedFile.path);
+        bloc?.changeFotoUrl(pickedFile.path);
+      });
+    }
   }
 
   @override
@@ -363,13 +352,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     apellidoController = TextEditingController();
     passwordController = TextEditingController();
     emailController = TextEditingController();
-    numberController = TextEditingController();
 
     primerNombreFocus = FocusNode();
     apellidoFocus = FocusNode();
     passwordFocus = FocusNode();
     emailFocus = FocusNode();
-    numberFocus = FocusNode();
   }
 
   @override
@@ -378,13 +365,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     apellidoController.dispose();
     passwordController.dispose();
     emailController.dispose();
-    numberController.dispose();
 
     primerNombreFocus.dispose();
     apellidoFocus.dispose();
     passwordFocus.dispose();
     emailFocus.dispose();
-    numberFocus.dispose();
 
     super.dispose();
   }

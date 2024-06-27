@@ -40,6 +40,7 @@ class _HomeTiendaScreemState extends State<HomeTiendaScreem> {
         title: const Text("Coffee Guillrmos", style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromARGB(255, 122, 64, 24),
       ),
+      backgroundColor: Colors.white, 
       body: Stack(
         children: [
           Container(
@@ -165,8 +166,7 @@ class _HomeTiendaScreemState extends State<HomeTiendaScreem> {
 
     return showCartButton
         ? FloatingActionButton(
-            child: Icon(Icons.shopping_cart_sharp),
-            backgroundColor: Colors.deepPurpleAccent,
+            backgroundColor: const Color.fromARGB(255, 147, 91, 41),
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -176,6 +176,7 @@ class _HomeTiendaScreemState extends State<HomeTiendaScreem> {
                 ),
               ),
             ),
+            child: Icon(Icons.shopping_cart_sharp, color: Colors.white,),
           )
         : Container();
   }

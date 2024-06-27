@@ -1,8 +1,6 @@
-import 'package:argenis_app/src/models/favoritos_model.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:argenis_app/src/models/producto_model.dart';
-// Importa la pantalla de favoritos
 
 class VerProductoScreen extends StatefulWidget {
   const VerProductoScreen({Key? key}) : super(key: key);
@@ -12,8 +10,7 @@ class VerProductoScreen extends StatefulWidget {
 }
 
 class _VerProductoScreenState extends State<VerProductoScreen> {
-  ProductoModel producto = ProductoModel();
-  bool _favorito = false; // Estado del botón de favorito
+  late ProductoModel producto;
   late SharedPreferences _prefs;
 
   @override
@@ -24,49 +21,6 @@ class _VerProductoScreenState extends State<VerProductoScreen> {
 
   void _initSharedPreferences() async {
     _prefs = await SharedPreferences.getInstance();
-    _loadFavoritoState();
-  }
-
-  void _toggleFavorito() {
-    setState(() {
-      _favorito = !_favorito;
-      _saveFavoritoState(_favorito);
-    });
-  }
-
-  void _loadFavoritoState() {
-    setState(() {
-      _favorito = _prefs.getBool('favorito_${producto.id}') ?? false;
-    });
-  }
-
-  void _saveFavoritoState(bool value) {
-    _prefs.setBool('favorito_${producto.id}', value);
-  }
-
-  void _verFavoritos() {
-    // Navegar a la pantalla de favoritos solo si el producto es favorito
-    if (_favorito) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => FavoritosModelScreen()),
-      );
-    } else {
-      // Aquí puedes mostrar un mensaje o alguna acción si el producto no es favorito
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('Producto no Favorito'),
-          content: Text('Marca este producto como favorito para verlo en favoritos.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('OK'),
-            ),
-          ],
-        ),
-      );
-    }
   }
 
   @override
@@ -80,7 +34,6 @@ class _VerProductoScreenState extends State<VerProductoScreen> {
       appBar: AppBar(
         title: Text(producto.titulo, style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromARGB(255, 122, 64, 24),
-
       ),
       body: Stack(
         children: [
@@ -105,16 +58,6 @@ class _VerProductoScreenState extends State<VerProductoScreen> {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    backgroundColor: Colors.black.withOpacity(0.5),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'Precio: \$${producto.valor.toStringAsFixed(2)}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
                     color: Colors.white,
                     backgroundColor: Colors.black.withOpacity(0.5),
                   ),

@@ -23,12 +23,21 @@ class _ProductoPageState extends State<ProductoPage> {
   bool _guardando = false;
   File? foto;
 
+  TextEditingController descripcionController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    descripcionController.text = producto.descripcion ?? "";
+  }
+
   @override
   Widget build(BuildContext context) {
 
     final ProductoModel? prodData = ModalRoute.of(context)?.settings.arguments as ProductoModel?;
     if (prodData != null) {
       producto = prodData;
+      descripcionController.text = producto.descripcion ?? "";
     }
 
     return Scaffold(
@@ -47,6 +56,7 @@ class _ProductoPageState extends State<ProductoPage> {
           ),
         ],
       ),
+      backgroundColor: Colors.white, 
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(15.0),
@@ -58,6 +68,29 @@ class _ProductoPageState extends State<ProductoPage> {
                 _crearNombre(),
                 _crearPrecio(),
                 _crearDescrpcion(),
+                const SizedBox(height: 30),
+                const Text(
+                  '------Preview de la descripcion------',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Descripción: ${descripcionController.text}',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+                const Text(
+                  '-----------------------------------------------------',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
                 const SizedBox(height: 20),
                 _crearBoton(),
               ],
@@ -87,12 +120,16 @@ class _ProductoPageState extends State<ProductoPage> {
 
   Widget _crearDescrpcion() {
     return TextFormField(
-      initialValue: producto.descripcion,
+      controller: descripcionController,
       textCapitalization: TextCapitalization.sentences,
       decoration: const InputDecoration(
         labelText: "Descripcion"
       ),
-      onSaved: (value) => producto.descripcion = value!,
+      onChanged: (value) {
+        setState(() {
+          producto.descripcion = value;
+        });
+      },
       validator: (value) {
         if (value!.length < 3) {
           return "Ingrese una descripcion";
@@ -123,13 +160,13 @@ class _ProductoPageState extends State<ProductoPage> {
   Widget _crearBoton() {
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.deepPurple,
+          backgroundColor: const Color.fromARGB(255, 124, 74, 31),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
       ),
       label: const Text("Guardar", style: TextStyle(color: Colors.white)),
-      icon: const Icon(Icons.save),
+      icon: const Icon(Icons.save, color: Colors.white,),
       onPressed: (_guardando) ? null : _submit,
     );
   }

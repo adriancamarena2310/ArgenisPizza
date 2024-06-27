@@ -31,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
         title: const Text('Inicio de Sesión', style: TextStyle(color: Colors.white),),
         backgroundColor: Color.fromARGB(255, 124, 74, 31),
       ),
+      backgroundColor: Colors.white, 
       body: _loginForm(context),
     );
   }
@@ -45,7 +46,7 @@ Widget _loginForm(BuildContext context) {
         children: [
           SafeArea(
             child: Container(
-              height: 180.0,
+              height: 140.0,
             ),
           ),
           Container(
@@ -77,8 +78,8 @@ Widget _loginForm(BuildContext context) {
             ),
           ),
           TextButton(   
-           child: const Text("Crear cuenta nueva"),
-           onPressed: () => Navigator.pushReplacementNamed(context, "/register"),
+          child: const Text("Crear cuenta nueva", style: TextStyle(color: const Color.fromARGB(255, 147, 91, 41),),),
+          onPressed: () => Navigator.pushReplacementNamed(context, "/register"),
           ),
           const SizedBox(height: 100.0),
         ],
@@ -87,7 +88,7 @@ Widget _loginForm(BuildContext context) {
   }
 
 
-   Widget _crearEmail(LoginBloc bloc) {
+  Widget _crearEmail(LoginBloc bloc) {
     return StreamBuilder<String>(
       stream: bloc.emailStream,
       builder: (context, snapshot) {
@@ -97,10 +98,9 @@ Widget _loginForm(BuildContext context) {
             controller: emailController,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              icon: const Icon(Icons.alternate_email, color: Colors.deepPurple),
+              icon: const Icon(Icons.alternate_email, color: const Color.fromARGB(255, 147, 91, 41)),
               hintText: "ejemplo@correo.com",
               labelText: "Correo electrónico",
-              counterText: snapshot.data,
               errorText: snapshot.error as String?,
             ),
             onChanged: bloc.changeEmail,
@@ -122,9 +122,8 @@ Widget _loginForm(BuildContext context) {
             controller: passwordController,
             obscureText: true,
             decoration: InputDecoration(
-              icon: const Icon(Icons.lock_outline, color: Colors.deepPurple),
+              icon: const Icon(Icons.lock_outline, color: const Color.fromARGB(255, 147, 91, 41)),
               labelText: "Contraseña",
-              counterText: snapshot.data,
               errorText: snapshot.error as String?,
             ),
             onChanged: bloc.changePassword,
@@ -135,13 +134,13 @@ Widget _loginForm(BuildContext context) {
     );
   }
 
-   Widget _crearBoton(LoginBloc bloc) {
+  Widget _crearBoton(LoginBloc bloc) {
     return StreamBuilder<bool>(
       stream: bloc.formValidStream,
       builder: (context, snapshot) {
         return ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.deepPurple,
+            backgroundColor: const Color.fromARGB(255, 147, 91, 41),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5.0),
             ),
@@ -165,7 +164,12 @@ Widget _loginForm(BuildContext context) {
     if( info["ok"]){
       print(user);
       // ignore: use_build_context_synchronously
-      Navigator.pushReplacementNamed(context, "/homeDomicilio",arguments: user);
+      if(user?.email == "admin@admin.com"){
+        Navigator.pushReplacementNamed(context, "/adminhome",arguments: user);
+      }else{
+        Navigator.pushReplacementNamed(context, "/homeDomicilio",arguments: user);
+      }
+      
     }else{
       // ignore: use_build_context_synchronously
       mostrarAlerta(context, info["mensaje"]);

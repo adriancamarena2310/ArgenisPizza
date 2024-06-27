@@ -1,94 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:argenis_app/src/models/usuario_model.dart';
-import 'package:argenis_app/src/screens/Profile_Screen.dart';
+import 'package:argenis_app/src/models/producto_model.dart';
 
-class GetDrawer extends StatelessWidget {
+class GetDrawer {
   final UsuarioModel user;
+  final List<ProductoModel> productos;
+  final List<int> quantities;
 
-  const GetDrawer({required this.user, Key? key}) : super(key: key);
+  GetDrawer({
+    required this.user,
+    required this.productos,
+    required this.quantities,
+  });
+  
 
-  Widget getDrawer(BuildContext context) {
-    final String name = "${user.primerNombre} ${user.apellido ?? ''}";
-
+  Widget build(BuildContext context) {
+    String name = "${user.primerNombre} ${user.apellido}";
     return Drawer(
       child: ListView(
-        children: <Widget>[
+        padding: EdgeInsets.zero,
+        children: [
           UserAccountsDrawerHeader(
-            accountName: Text(
-              name,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+            accountName: Text(name ?? ''),
+            accountEmail: Text(user.email),
+            currentAccountPicture: CircleAvatar(
+              backgroundImage: user.fotoUrl != null
+                  ? NetworkImage(user.fotoUrl!)
+                  : AssetImage('images/assets/default_avatar.png') as ImageProvider,
             ),
-            accountEmail: Text(user.email ?? "invitado@example.com"),
-            currentAccountPicture: Container(
-              width: 60,
-              height: 60,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: user.fotoUrl != null
-                    ? Image.network(
-                        user.fotoUrl!,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      )
-                    : Image.asset(
-                        "images/users/chikil.jpg",
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-              ),
-            ),
-            otherAccountsPictures: [
-              IconButton(
-                icon: const Icon(Icons.settings, color: Colors.white),
-                onPressed: () {
-                  Navigator.pushNamed(context, "/profile", arguments: user);
-                },
-              ),
-            ],
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color.fromARGB(255, 133, 65, 20), Color.fromARGB(218, 0, 0, 0)],
-                end: Alignment.bottomRight,
-              ),
+              color: Color.fromARGB(255, 122, 64, 24),
             ),
           ),
           ListTile(
-            title: const Text("Inicio"),
             leading: const Icon(Icons.home),
-            onTap: () => showHome(context),
+            title: const Text('Home'),
+            onTap: () {
+              Navigator.pop(context);
+            },
           ),
           ListTile(
-            title: const Text("Favoritos"),
-            leading: const Icon(Icons.star_purple500_sharp),
-            onTap: () => showHome(context),
+            leading: const Icon(Icons.person),
+            title: const Text('Perfil'),
+            onTap: () {
+              Navigator.pushNamed(context, '/profile', arguments: user);
+            },
           ),
           ListTile(
-            title: const Text("Carrito"),
-            leading: const Icon(Icons.shopping_cart_checkout_sharp),
-            onTap: () => showHome(context),
-          ),
-          ListTile(
-            title: const Text("Cerrar Sesión"),
-            leading: const Icon(Icons.logout),
-            onTap: () => logout(context),
+            leading: const Icon(Icons.exit_to_app),
+            title: const Text('Salir'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/');
+              // Lógica para salir de la sesión
+            },
           ),
         ],
       ),
     );
-  }
-
-  static void showHome(BuildContext context) {
-    Navigator.of(context).pop();
-  }
-
-  static void logout(BuildContext context) {
-    Navigator.of(context).pushNamed('/');
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }

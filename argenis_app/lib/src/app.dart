@@ -1,3 +1,5 @@
+import 'package:argenis_app/src/models/usuario_model.dart';
+import 'package:argenis_app/src/screens/Admin_Screen.dart';
 import 'package:argenis_app/src/screens/Carrito_Screen.dart' as carrito_screen;
 import 'package:argenis_app/src/screens/Home_Domicilio_Screen.dart';
 import 'package:argenis_app/src/screens/Home_Tienda_Screen.dart';
@@ -15,8 +17,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "ArgenisPizza",
+      title: "Guillrmos coffee",
       initialRoute: "/",
+      theme: ThemeData(
+        primaryColor: const Color.fromARGB(255, 147, 91, 41),
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: const Color.fromARGB(255, 147, 91, 41),
+        ),),
       debugShowCheckedModeBanner: false,
       routes: {
         "/": (BuildContext context) => PreviewScreen(), // Prelogin
@@ -24,13 +31,14 @@ class MyApp extends StatelessWidget {
         "/register": (BuildContext context) => const RegisterScreen(),
         "/homeTienda": (BuildContext context) => const HomeTiendaScreem(),
         "/homeDomicilio": (BuildContext context) => const HomeDomicilioScreen(),
-        "/profile": (BuildContext context) => const ProfileScreen(),
-        "/producto": (BuildContext context) => ProductoPage(),
-        "/VerProducto": (BuildContext context) => VerProductoScreen(),
+        "/profile": (BuildContext context) => EditProfileScreen(usuario: UsuarioModel()),
+        "/producto": (BuildContext context) => const ProductoPage(),
+        "/VerProducto": (BuildContext context) => const VerProductoScreen(),
         "/carrito": (BuildContext context) => carrito_screen.CarritoScreen(
-          productos: [], // Estos valores no se utilizarán, el propósito es solo registrar la ruta
-          quantities: [],
+          productos: const [], // Estos valores no se utilizarán, el propósito es solo registrar la ruta
+          quantities: const [],
         ),
+        "/adminhome": (BuildContext context) => AdminScreen(),
       },
     );
   }
