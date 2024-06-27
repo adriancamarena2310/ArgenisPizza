@@ -1,33 +1,30 @@
-import 'package:argenis_app/src/models/usuario_model.dart';
-import 'package:argenis_app/src/screens/NavBar.dart';
 import 'package:flutter/material.dart';
+import 'package:argenis_app/src/models/usuario_model.dart';
 import 'package:argenis_app/src/models/producto_model.dart';
 import 'package:argenis_app/src/providers/productos_provider.dart';
-
+import 'package:argenis_app/src/screens/NavBar.dart'; // Asegúrate de importar correctamente NavBar
 
 class HomeDomicilioScreen extends StatefulWidget {
-  const HomeDomicilioScreen({super.key});
+  const HomeDomicilioScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeDomicilioScreen> createState() => _HomeDomicilioScreenState();
 }
 
 class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
-  final _scaffkey = GlobalKey<ScaffoldState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final productosProvider = ProductosProvider();
-  UsuarioModel usser = UsuarioModel();
-  double total = 0.0;
-  List<int> quantities = List<int>.filled(5, 0);
+  UsuarioModel user = UsuarioModel(); // Cambiado a 'user' en vez de 'usser'
 
   @override
   Widget build(BuildContext context) {
-    final UsuarioModel user = ModalRoute.of(context)!.settings.arguments as UsuarioModel;
-    if (user != null) {
-      usser = user;
+    final UsuarioModel usuario = ModalRoute.of(context)!.settings.arguments as UsuarioModel;
+    if (usuario != null) {
+      user = usuario;
     }
 
     return Scaffold(
-      key: _scaffkey,
+      key: _scaffoldKey,
       appBar: AppBar(
         title: const Text("Coffee Guillrmos", style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromARGB(255, 122, 64, 24),
@@ -46,7 +43,7 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
         ],
       ),
       floatingActionButton: _floatingButton(context),
-      drawer: NavBar(),  // Añade NavBar como drawer
+      drawer: GetDrawer(user: user).getDrawer(context), // Llama getDrawer() para obtener el drawer
     );
   }
 
@@ -68,7 +65,7 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
   }
 
   Widget _crearItem(BuildContext context, ProductoModel producto) {
-    return usser.email == "admin@admin.com" ? _crearAdminItem(context, producto) : _crearUserItem(context, producto);
+    return user.email == "admin@admin.com" ? _crearAdminItem(context, producto) : _crearUserItem(context, producto);
   }
 
   Widget _crearAdminItem(BuildContext context, ProductoModel producto) {
@@ -101,8 +98,8 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
                     ),
                   ),
             ListTile(
-              title: Text("${producto.titulo} - \$${producto.valor.toStringAsFixed(2)}"),
-              subtitle: Text("${producto.id}"),
+              title: Text("${producto.titulo}"),
+              subtitle: Text("\$${producto.valor.toStringAsFixed(2)}"),
               onTap: () async {
                 Navigator.pushNamed(context, "/producto", arguments: producto);
                 setState(() {});
@@ -138,8 +135,8 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
                   ),
                 ),
           ListTile(
-            title: Text("${producto.titulo} - \$${producto.valor.toStringAsFixed(2)}"),
-            subtitle: Text("${producto.id}"),
+            title: Text("${producto.titulo}"),
+            subtitle: Text("\$${producto.valor.toStringAsFixed(2)}"),
             onTap: () async {
               Navigator.pushNamed(context, "/VerProducto", arguments: producto);
               setState(() {});
@@ -150,14 +147,8 @@ class _HomeDomicilioScreenState extends State<HomeDomicilioScreen> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    total = 0;
-  }
-
   Widget _floatingButton(BuildContext context) {
-    if (usser.email == "admin@admin.com") {
+    if (user.email == "admin@admin.com") {
       return FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: Colors.deepPurpleAccent,

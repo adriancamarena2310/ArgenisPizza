@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:argenis_app/src/bloc/loggin_bloc.dart';
 import 'package:argenis_app/src/bloc/provider.dart';
 import 'package:argenis_app/src/models/usuario_model.dart';
+import 'package:argenis_app/src/providers/productos_provider.dart';
 import 'package:argenis_app/src/providers/usuario_provider.dart';
 import 'package:argenis_app/src/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final usuarioProvider = UsuarioProvider();
   File? foto;
   String? fotoUrl2; // URL de la foto seleccionada
+  final productoProvider = ProductosProvider();
 
   late FocusNode primerNombreFocus;
   late FocusNode apellidoFocus;
@@ -260,13 +262,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       print("Formulario no válido");
       return;
     }
-    print("============================================");
-    print(bloc.email);
-    print(bloc.primerNombre);
-    print(bloc.apellido);
-    print(bloc.fotoUrl);
-    print(bloc.password);
-    print("============================================");
 
     // Obtener la URL de la foto, usando una cadena vacía si es null
     String fotoUrl = bloc.fotoUrl.isNotEmpty ? bloc.fotoUrl : '';
@@ -274,6 +269,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     // Realizar el registro
     Map info = await usuarioProvider.nuevoUsuario(bloc.email, bloc.password);
     print("Información del usuario: $info");
+
+    if (foto != null) {
+      fotoUrl2 = await productoProvider.subirImagem(foto!);
+    }
 
     UsuarioModel user = UsuarioModel(
       primerNombre: bloc.primerNombre,
@@ -339,7 +338,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final picker = ImagePicker();
   final pickedFile = await picker.pickImage(source: origen);
   fotoUrl2 = pickedFile!.path;
-  print(pickedFile!.path);
   bloc?.changeFotoUrl(pickedFile!.path); 
   if (pickedFile != null) {
     setState(() {

@@ -1,6 +1,8 @@
+import 'package:argenis_app/src/models/favoritos_model.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:argenis_app/src/models/producto_model.dart';
+// Importa la pantalla de favoritos
 
 class VerProductoScreen extends StatefulWidget {
   const VerProductoScreen({Key? key}) : super(key: key);
@@ -11,25 +13,18 @@ class VerProductoScreen extends StatefulWidget {
 
 class _VerProductoScreenState extends State<VerProductoScreen> {
   ProductoModel producto = ProductoModel();
-  int _cantidad = 0;
   bool _favorito = false; // Estado del botón de favorito
+  late SharedPreferences _prefs;
 
   @override
   void initState() {
     super.initState();
+    _initSharedPreferences();
+  }
+
+  void _initSharedPreferences() async {
+    _prefs = await SharedPreferences.getInstance();
     _loadFavoritoState();
-  }
-
-  void _incrementarCantidad() {
-    setState(() {
-      if (_cantidad < 20) _cantidad++;
-    });
-  }
-
-  void _reducirCantidad() {
-    setState(() {
-      if (_cantidad > 0) _cantidad--;
-    });
   }
 
   void _toggleFavorito() {
@@ -39,16 +34,39 @@ class _VerProductoScreenState extends State<VerProductoScreen> {
     });
   }
 
-  void _loadFavoritoState() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  void _loadFavoritoState() {
     setState(() {
-      _favorito = prefs.getBool('favorito_${producto.id}') ?? false;
+      _favorito = _prefs.getBool('favorito_${producto.id}') ?? false;
     });
   }
 
-  void _saveFavoritoState(bool value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('favorito_${producto.id}', value);
+  void _saveFavoritoState(bool value) {
+    _prefs.setBool('favorito_${producto.id}', value);
+  }
+
+  void _verFavoritos() {
+    // Navegar a la pantalla de favoritos solo si el producto es favorito
+    if (_favorito) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => FavoritosModelScreen()),
+      );
+    } else {
+      // Aquí puedes mostrar un mensaje o alguna acción si el producto no es favorito
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Producto no Favorito'),
+          content: Text('Marca este producto como favorito para verlo en favoritos.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   @override
@@ -57,19 +75,12 @@ class _VerProductoScreenState extends State<VerProductoScreen> {
     if (prodData != null) {
       producto = prodData;
     }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(producto.titulo, style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromARGB(255, 122, 64, 24),
-        actions: [
-          IconButton(
-            icon: Icon(
-              _favorito ? Icons.star : Icons.star_border,
-              color: _favorito ? Colors.amber : Colors.grey[400],
-            ),
-            onPressed: _toggleFavorito,
-          ),
-        ],
+
       ),
       body: Stack(
         children: [
@@ -117,50 +128,6 @@ class _VerProductoScreenState extends State<VerProductoScreen> {
                     color: Colors.white,
                     backgroundColor: Colors.black.withOpacity(0.5),
                   ),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    // Acción para agregar el producto
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(100, 50),
-                  ),
-                  child: Text(
-                    'Agregar',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(164, 225, 108, 5),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: _reducirCantidad,
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(40, 40),
-                      ),
-                      child: Text('-', style: TextStyle(fontSize: 30, color: Color.fromARGB(164, 225, 108, 5))),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Text(
-                        '$_cantidad',
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color.fromARGB(164, 225, 108, 5)),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: _incrementarCantidad,
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(40, 40),
-                      ),
-                      child: Text('+', style: TextStyle(fontSize: 30, color: Color.fromARGB(164, 225, 108, 5))),
-                    ),
-                  ],
                 ),
               ],
             ),
